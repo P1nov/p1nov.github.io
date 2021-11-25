@@ -199,7 +199,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>November 25, 2021</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>17955</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>18796</span>
     </div>
   </div>
 </section>
@@ -564,7 +564,28 @@
 <p>_此种设置方式可以让该函数内部能够使用<code>SpreadsheetCell</code>的<code>private</code>或者<code>protected</code>中的函数或者成员变量 _</p>
 </li>
 </ul>
-<h4 id="10-什么是运算符重载"><a href="#10-什么是运算符重载" class="headerlink" title="10. 什么是运算符重载"></a>10. 什么是运算符重载</h4><h4 id="11-如何将类的接口与实现分离"><a href="#11-如何将类的接口与实现分离" class="headerlink" title="11. 如何将类的接口与实现分离"></a>11. 如何将类的接口与实现分离</h4>
+<h4 id="10-什么是运算符重载"><a href="#10-什么是运算符重载" class="headerlink" title="10. 什么是运算符重载"></a>10. 什么是运算符重载</h4><ul>
+<li>运算符重载的实现</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpreadsheetCell</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">  	<span class="keyword">const</span> SpreadsheetCell <span class="keyword">operator</span>+(<span class="keyword">const</span> SpreadsheetCell&amp; cell) <span class="keyword">const</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> SpreadsheetCell SpreadsheetCell::<span class="keyword">operator</span>+(<span class="keyword">const</span> SpreadsheetCell&amp; cell) <span class="keyword">const</span> &#123;</span><br><span class="line">      SpreadsheetCell newCell;</span><br><span class="line">      newCell.<span class="built_in">set</span>(mValue + cell.mValue);</span><br><span class="line">      <span class="keyword">return</span> newCell;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>隐式转换</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SpreadsheetCell newCell = oldCell + <span class="number">5.6f</span>;</span><br></pre></td></tr></table></figure>
+
+<p><em>该示例将<code>5.6f</code>隐式地使用构造函数转换成了<code>SpreadsheetCell</code>对象，再使用<code>operator+</code>运算符运算</em></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpreadsheetCell</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">  	<span class="function"><span class="keyword">explicit</span> <span class="title">SpreadsheetCell</span><span class="params">(<span class="keyword">double</span> initialValue)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><em><code>explicit</code>关键字表明构造函数不允许隐式转换</em></p>
+<p><em>隐式转换只适用于只有一个参数的构造函数</em></p>
+</li>
+<li><p>运算符左右是什么不影响程序</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 全局运算符重载</span></span><br><span class="line"><span class="keyword">const</span> SpreadsheetCell <span class="keyword">operator</span>+(<span class="keyword">const</span> SpreadsheetCell&amp; lhs, <span class="keyword">const</span> SpreadsheetCell&amp; rhs) &#123;</span><br><span class="line">  SpreadsheetCell newCell;</span><br><span class="line">  newCell.<span class="built_in">set</span>(lhs.value + rhs.value);</span><br><span class="line">  <span class="keyword">return</span> newCell;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>创建具有运算符重载的类型</p>
+<p>基本算数运算符、简写算数运算符、比较运算符</p>
+</li>
+</ul>
+<h4 id="11-如何将类的接口与实现分离"><a href="#11-如何将类的接口与实现分离" class="headerlink" title="11. 如何将类的接口与实现分离"></a>11. 如何将类的接口与实现分离</h4>
       </section>
       <section class="extra">
         
