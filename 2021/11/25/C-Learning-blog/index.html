@@ -1,0 +1,615 @@
+
+
+<!DOCTYPE html>
+<html lang="en" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>C++学习笔记 - Hexo</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content=", C++">
+  <meta name="description" content="C++一、开始1. 编译指令
+#include 编译指...">
+  <meta name="author" content="Pino">
+  <link rel="icon" href="/images/icons/favicon-16x16.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/favicon-32x32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/stun-logo.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/favicon-144x144.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: true,
+        alipay: 'https://pic.izhaoo.com/alipay.jpg',
+        wechat: 'https://pic.izhaoo.com/wechat.jpg'
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: true
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '请用你绝对清醒的理智去压抑不该有的情绪',
+          typing: true,
+          api: '',
+          data_contents: ''
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://pic.izhaoo.com/weapp-code.jpg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: false,
+        path: 'search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">C++学习笔记</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="/ " class="underline "> 首页</a>
+      </li><li class="menu-item">
+        <a href="/archives " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/theme/post-image.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">C++学习笔记</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>November 25, 2021</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>9577</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <h1 id="C"><a href="#C" class="headerlink" title="C++"></a>C++</h1><h2 id="一、开始"><a href="#一、开始" class="headerlink" title="一、开始"></a>一、开始</h2><h4 id="1-编译指令"><a href="#1-编译指令" class="headerlink" title="1. 编译指令"></a>1. 编译指令</h4><ul>
+<li><p><code>#include</code> 编译指令<br>将指定的文件插入到代码中指令所在的位置</p>
+</li>
+<li><p><code>#define</code> 预处理指令</p>
+<p>常用于定义常数值或者宏</p>
+</li>
+<li><p><code>#ifdef [key]``#ifndef [key]</code>, <code>#endif</code></p>
+<p>经常被用来防止循环包含</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MyHeader_H</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MyHeader_H</span></span><br><span class="line"><span class="comment">// ... 内容</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></li>
+<li><p><code>#pragma [xyz]</code></p>
+<p>预处理期间会收到警告或者错误信息</p>
+</li>
+</ul>
+<h4 id="2-输入与输出流"><a href="#2-输入与输出流" class="headerlink" title="2. 输入与输出流"></a>2. 输入与输出流</h4><h4 id="3-名称空间"><a href="#3-名称空间" class="headerlink" title="3. 名称空间"></a>3. 名称空间</h4><ul>
+<li><p><code>namespace</code> 命名空间</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> ama &#123;</span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">AmaObject</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">testFunction</span><span class="params">()</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>示例内容</em></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> ama;</span><br><span class="line">AmaObject *object = <span class="keyword">new</span> <span class="built_in">AmaObject</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> ama::AmaObject;</span><br><span class="line">AmaObject *object = <span class="keyword">new</span> <span class="built_in">AmaObject</span>();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="4-类型"><a href="#4-类型" class="headerlink" title="4. 类型"></a>4. 类型</h4><ul>
+<li><p>枚举类型</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 普通枚举</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">enum</span> &#123;</span></span><br><span class="line">  kPieceTypeKing,</span><br><span class="line">  kPieceTypeQueen,</span><br><span class="line">  kPieceTypeRook,</span><br><span class="line">  kPieceTypePawn</span><br><span class="line">&#125; PieceT;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 强类型枚举</span></span><br><span class="line"><span class="comment">// 默认类型是整型</span></span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="keyword">class</span> <span class="title">MyEnum</span> &#123;</span></span><br><span class="line">  EnumValue1,</span><br><span class="line">  EnumValue2 = <span class="number">10</span>,</span><br><span class="line">  EnumValue3</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 可以提供继承类型</span></span><br><span class="line"><span class="keyword">enum</span> class MyEnum: <span class="keyword">unsigned</span> <span class="keyword">long</span> &#123;</span><br><span class="line">  EnumValueLong1,</span><br><span class="line">  EnumValueLong2 = <span class="number">10</span>,</span><br><span class="line">  EnumValueLong3</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>结构体</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">  <span class="keyword">char</span> firstInitial;</span><br><span class="line">  <span class="keyword">char</span> middleInitial;</span><br><span class="line">  <span class="keyword">char</span> lastInitial;</span><br><span class="line">  <span class="keyword">int</span> employeeNumber;</span><br><span class="line">  <span class="keyword">int</span> salary;</span><br><span class="line">&#125; EmployeeT;</span><br></pre></td></tr></table></figure></li>
+<li><p>数组</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> arr[] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span>&amp; i : arr) &#123;</span><br><span class="line">  i += <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 初始化一个10个元素的数组并将每个元素设为0，只有设置为0的时候有效</span></span><br><span class="line"><span class="keyword">int</span> myArray[<span class="number">10</span>] = &#123;<span class="number">0</span>&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="5-指针以及动态内存"><a href="#5-指针以及动态内存" class="headerlink" title="5. 指针以及动态内存"></a>5. 指针以及动态内存</h4><ul>
+<li><p>堆栈和堆</p>
+<p><em>每个函数都有独立的内存空间（堆栈帧）</em></p>
+<p><em>堆是与当前函数或者堆栈帧完全没有关系的内存区域，如果想要函数调用结束后仍然保存其中声明的变量，可以将变量放到堆中</em></p>
+</li>
+<li><p>动态分配的数组</p>
+<p>使用堆内存初始化指针，可以使用<code>new</code>命令</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> arraySize = <span class="number">8</span>;</span><br><span class="line"><span class="keyword">int</span>* myVariableSizedArray;</span><br><span class="line">myVariableSizedArray = <span class="keyword">new</span> <span class="keyword">int</span>[arraySize];</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/11/25/C-Learning-blog/heap_and_stack.jpg" class="" title="动态数组的内存分配">
+
+<p><em>由上图可看出指针变量仍然在堆栈中，但动态创建的数组在堆中</em></p>
+<p><em><code>new</code>或者<code>new[]</code>必须使用<code>delete</code>或者<code>delete[]</code>来释放内存，对应的<code>malloc()</code>对应使用<code>free()</code></em></p>
+<p><em>智能指针 <code>unique_ptr&lt;int[]&gt;</code></em></p>
+</li>
+<li><p>使用指针</p>
+<p><code>int* myIntegerPointer = new int;</code></p>
+<p><em>指针只是一个指向整数值的地址，访问这个值需要对指针解除引用</em></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Employee *e = <span class="built_in">getEmployee</span>();</span><br><span class="line">cout &lt;&lt; (*e).salary &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+
+<p><em><code>-&gt;</code>运算符允许在一步之内对指针解除引用并访问字段，例如：<code>e-&gt;salary;</code></em></p>
+</li>
+</ul>
+<h4 id="6-C-中的字符串"><a href="#6-C-中的字符串" class="headerlink" title="6.C++中的字符串"></a>6.C++中的字符串</h4><ul>
+<li><p>C 风格字符串</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> arrayString[<span class="number">20</span>] = <span class="string">&quot;Hello, World&quot;</span>;</span><br><span class="line"><span class="keyword">char</span>* pointerString = <span class="string">&quot;Hello, World&quot;</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>C++字符串</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line">string myString = <span class="string">&quot;Hello, World&quot;</span>;</span><br><span class="line"></span><br><span class="line">string str1 = <span class="string">&quot;Hello&quot;</span>;</span><br><span class="line">string str2 = <span class="string">&quot;, &quot;</span>;</span><br><span class="line">string str3 = <span class="string">&quot;World&quot;</span>;</span><br><span class="line">string result = str1 + str2 + str3;  </span><br></pre></td></tr></table></figure>
+<h4 id="7-引用"><a href="#7-引用" class="headerlink" title="7. 引用"></a>7. 引用</h4></li>
+<li><p>右值引用（解决传递常量引起的问题）</p>
+</li>
+</ul>
+<h4 id="8-异常"><a href="#8-异常" class="headerlink" title="8. 异常"></a>8. 异常</h4><ul>
+<li><p><code>throw</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdexcept&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">divideNumbers</span><span class="params">(<span class="keyword">double</span> inNumerator, <span class="keyword">double</span> inDenominator)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (inDenominator == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> std::<span class="built_in">exception</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> inNumerator / inDenominator;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">divideNumbers</span>(<span class="number">2.5</span>, <span class="number">0.5</span>) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">divideNumbers</span>(<span class="number">2.3</span>, <span class="number">0</span>) &lt;&lt; endl;</span><br><span class="line">  &#125; <span class="built_in"><span class="keyword">catch</span></span> (<span class="keyword">const</span> exception&amp; exception) &#123;</span><br><span class="line">    count &lt;&lt; <span class="string">&quot;An exception was caught&quot;</span> &lt;&lt; endl;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="9-const-的多种用法"><a href="#9-const-的多种用法" class="headerlink" title="9. const 的多种用法"></a>9. const 的多种用法</h4><ul>
+<li><p>定义常量</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">float</span> kVersionNumber = <span class="number">2.0f</span>;</span><br><span class="line"><span class="keyword">const</span> string kProductName = <span class="string">&quot;Super Hyper Net Modulator&quot;</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>使用const保护参数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mysteryFunction</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* myString)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">char</span>* myString = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">2</span>];</span><br><span class="line">  myString[<span class="number">0</span>] = <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">  myString[<span class="number">1</span>] = <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">  <span class="built_in">mysteryFunction</span>(myString);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">mysteryFunction</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* myString)</span> </span>&#123;</span><br><span class="line">  myString[<span class="number">0</span>] = <span class="string">&#x27;b&#x27;</span>; <span class="comment">// 报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>const 引用</p>
+<p><em>主要用于提高效率，使用引用就不会拷贝新对象出来直接使用指向原始数据的指针（对象可能会比较庞大，拷贝可能会需要很大的代价）</em></p>
+</li>
+</ul>
+<h2 id="二、面向对象"><a href="#二、面向对象" class="headerlink" title="二、面向对象"></a>二、面向对象</h2><h4 id="1-声明类"><a href="#1-声明类" class="headerlink" title="1. 声明类"></a>1. 声明类</h4><ul>
+<li><p>头文件中声明</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AirlineTicket</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">      <span class="built_in">AirlineTicket</span>(); <span class="comment">// 构造函数</span></span><br><span class="line">      ~<span class="built_in">AirlineTicket</span>(); <span class="comment">// 析构函数</span></span><br><span class="line">      <span class="function"><span class="keyword">int</span> <span class="title">calculatePriceInDollars</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">getPassengerName</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">      <span class="function"><span class="keyword">void</span> <span class="title">setPassengerName</span><span class="params">(std::string inName)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>Employee 类 和 DataBase 类</p>
+<p><em>见代码</em></p>
+</li>
+</ul>
+<h4 id="2-标准库"><a href="#2-标准库" class="headerlink" title="2. 标准库"></a>2. 标准库</h4><ul>
+<li><p><code>vector</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  vector&lt;string&gt; myVector = &#123;<span class="string">&quot;A first string&quot;</span>, <span class="string">&quot;A second string&quot;</span>&#125;;</span><br><span class="line">  myVector.<span class="built_in">push_back</span>(<span class="string">&quot;A third string&quot;</span>);</span><br><span class="line">  myVector.<span class="built_in">push_back</span>(<span class="string">&quot;The last string in the vector&quot;</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span> iterator = myVector.<span class="built_in">cbegin</span>(); iterator != myVector.<span class="built_in">cend</span>(); ++iterator) &#123;</span><br><span class="line">    cout &lt;&lt; *iterator &lt;&lt; endl;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span> str : myVector) &#123;</span><br><span class="line">    cout &lt;&lt; str &lt;&lt; endl;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="3-C-的设计特点"><a href="#3-C-的设计特点" class="headerlink" title="3. C++的设计特点"></a>3. C++的设计特点</h4><ul>
+<li>庞大的功能集</li>
+<li>面向对象</li>
+<li>有许多设计通用、可重复使用的工具</li>
+<li>有用的标准库</li>
+</ul>
+<h4 id="4-C-设计的两个原则"><a href="#4-C-设计的两个原则" class="headerlink" title="4. C++设计的两个原则"></a>4. C++设计的两个原则</h4><ul>
+<li>抽象</li>
+<li>重用</li>
+</ul>
+<h4 id="5-对象之间的关系"><a href="#5-对象之间的关系" class="headerlink" title="5. 对象之间的关系"></a>5. 对象之间的关系</h4><ul>
+<li><code>has-a</code> 有一个</li>
+<li><code>is-a</code> 继承(是一个)</li>
+<li><code>Not-a</code> 不是一个</li>
+<li>多态性</li>
+<li>多重继承</li>
+<li>混入类（mix-in）</li>
+</ul>
+<h2 id="三、设计可重用代码"><a href="#三、设计可重用代码" class="headerlink" title="三、设计可重用代码"></a>三、设计可重用代码</h2><h4 id="1-为什么要重用？"><a href="#1-为什么要重用？" class="headerlink" title="1. 为什么要重用？"></a>1. 为什么要重用？</h4><ul>
+<li>代码不大可能只在一个程序中使用</li>
+<li>重用设计可以节约时间和金钱</li>
+<li>团队中其他程序猿可以使用你编写的代码</li>
+<li>自己是主要受益人<h4 id="2-如何设计重用"><a href="#2-如何设计重用" class="headerlink" title="2. 如何设计重用"></a>2. 如何设计重用</h4></li>
+<li>避免组合不相干的概念或者逻辑上独立的概念</li>
+<li>将程序分为逻辑子系统</li>
+<li>用类层次结构分离逻辑概念</li>
+<li>用聚合分离逻辑概念</li>
+<li>消除用户接口的依赖性</li>
+<li>对泛型数据结构以及算法使用模版</li>
+</ul>
+<h4 id="3-模版优于其他泛型程序设计技术的原因"><a href="#3-模版优于其他泛型程序设计技术的原因" class="headerlink" title="3. 模版优于其他泛型程序设计技术的原因"></a>3. 模版优于其他泛型程序设计技术的原因</h4><ul>
+<li>可以通过存储<code>void*</code>指针来编写泛型数据结构（类型不安全）</li>
+<li>为特定的类编写数据结构</li>
+</ul>
+<h4 id="4-设计有用的接口"><a href="#4-设计有用的接口" class="headerlink" title="4. 设计有用的接口"></a>4. 设计有用的接口</h4><ul>
+<li>设计容易使用的接口</li>
+<li>不要省略必须的功能</li>
+<li>提供整洁的接口</li>
+<li>提供文档和注释</li>
+</ul>
+<h4 id="5-设计通用的接口"><a href="#5-设计通用的接口" class="headerlink" title="5. 设计通用的接口"></a>5. 设计通用的接口</h4><ul>
+<li><p>提供执行相同功能的多种方法</p>
+</li>
+<li><p>提供定制</p>
+<p><em>基本前提是向每个客户提供相同的基本功能，但是给用户轻微调整的能力</em></p>
+</li>
+</ul>
+<h2 id="四、对象和类"><a href="#四、对象和类" class="headerlink" title="四、对象和类"></a>四、对象和类</h2><h4 id="1-如何编写具有方法和数据成员的类"><a href="#1-如何编写具有方法和数据成员的类" class="headerlink" title="1. 如何编写具有方法和数据成员的类"></a>1. 如何编写具有方法和数据成员的类</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> std::string;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpreadsheetCell</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setValue</span><span class="params">(<span class="keyword">double</span> inValue)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">getValue</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setString</span><span class="params">(string inString)</span></span>;</span><br><span class="line">    <span class="function">string <span class="title">getString</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="keyword">double</span> mValue;</span><br><span class="line">    <span class="function">string <span class="title">doubleToString</span><span class="params">(<span class="keyword">double</span> inValue)</span> <span class="keyword">const</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">stringToDouble</span><span class="params">(string inString)</span> <span class="keyword">const</span></span>;</span><br><span class="line">    string mString;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">double</span> value;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-如何控制方法和数据成员的访问"><a href="#2-如何控制方法和数据成员的访问" class="headerlink" title="2. 如何控制方法和数据成员的访问"></a>2. 如何控制方法和数据成员的访问</h4><ul>
+<li><p>访问控制</p>
+<p><code>public</code>, <code>private</code>, <code>protected</code></p>
+<p>C++中类的默认访问控制是<code>private</code>, 而<code>struct</code> 或者 <code>union</code>的默认值是<code>public</code></p>
+</li>
+<li><p><code>::</code> 被称为作用域解析运算符</p>
+</li>
+</ul>
+<h4 id="3-如何在堆栈以及堆中使用对象"><a href="#3-如何在堆栈以及堆中使用对象" class="headerlink" title="3. 如何在堆栈以及堆中使用对象"></a>3. 如何在堆栈以及堆中使用对象</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SpreadsheetCell myCell, anotherCell; <span class="comment">// 堆栈中创建并使用</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">SpreadsheetCell* myCellP = <span class="keyword">new</span> <span class="built_in">SpreadsheetCell</span>(); <span class="comment">// 动态分配对象在堆中</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 一般方式创建并释放内存</span></span><br><span class="line">SpreadsheetCell* cellP = <span class="keyword">new</span> <span class="built_in">SpreadsheetCell</span>();</span><br><span class="line">(*cellP).<span class="built_in">setValue</span>(<span class="number">3.7</span>);</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;cell 1: &quot;</span> &lt;&lt; (*cellP).<span class="built_in">getValue</span>() &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; (*cellP).<span class="built_in">getString</span>() &lt;&lt; endl;</span><br><span class="line"><span class="keyword">delete</span> cellP;</span><br><span class="line">cellP = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 智能指针创建，不需要手动释放，内存会自动释放</span></span><br><span class="line"><span class="function">shared_ptr&lt;SpreadsheetCell&gt; <span class="title">cellP</span><span class="params">(<span class="keyword">new</span> SpreadsheetCell())</span></span>;</span><br><span class="line">cellP-&gt;<span class="built_in">setValue</span>(<span class="number">3.7</span>);</span><br><span class="line">cout &lt;&lt; <span class="string">&quot;cell 1: &quot;</span> &lt;&lt; cellP-&gt;<span class="built_in">getValue</span>() &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; cellP-&gt;<span class="built_in">getString</span>() &lt;&lt; endl;</span><br></pre></td></tr></table></figure>
+
+<p><em>如果使用<code>new</code>为对象分配了内存，结束时要用<code>delete</code>销毁对象，或者使用智能指针自动管理内存</em></p>
+<p><em>如果没有使用智能指针，使用<code>delete</code>销毁了对象时，最好将指针置为<code>null</code>，这样做可以防止删除对象后意外使用了这个指针，使得调试更加容易</em></p>
+<h4 id="4-什么是对象的生命周期"><a href="#4-什么是对象的生命周期" class="headerlink" title="4. 什么是对象的生命周期"></a>4. 什么是对象的生命周期</h4><ul>
+<li><p>创建、销毁以及赋值</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建对象</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">      std::string mName;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  MyClass obj;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>构造函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编写构造函数</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpreadsheetCell</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">      <span class="built_in">SpreadsheetCell</span>(<span class="keyword">double</span> initialValue);</span><br><span class="line">      <span class="built_in">SpreadsheetCell</span>(string initialValue); <span class="comment">// 多个构造函数</span></span><br><span class="line">&#125;</span><br><span class="line">SpreadsheetCell::<span class="built_in">SpreadsheetCell</span>(<span class="keyword">double</span> initialValue) &#123;</span><br><span class="line">  <span class="built_in">setValue</span>(initialValue);</span><br><span class="line">&#125;</span><br><span class="line">SpreadsheetCell::<span class="built_in">SpreadsheetCell</span>(string initialValue) &#123;</span><br><span class="line">  <span class="built_in">setString</span>(initialValue);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在构造函数中使用另外一个构造函数，是错误的，实际上是新建了一个同样类型的临时未命名对象，而不是初始化对象</span></span><br><span class="line"><span class="comment">//SpreadsheetCell::SpreadsheetCell(string initialValue) &#123;</span></span><br><span class="line"><span class="comment">//  SpreadsheetCell(stringToDouble(initialValue));</span></span><br><span class="line"><span class="comment">//&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用构造函数</span></span><br><span class="line"><span class="comment">// 堆栈中使用构造函数</span></span><br><span class="line"><span class="function">SpreadsheetCell <span class="title">myCell</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line"><span class="function">SpreadsheetCell <span class="title">myCell</span><span class="params">(<span class="string">&quot;test&quot;</span>)</span></span>;</span><br><span class="line"><span class="comment">// 堆中使用构造函数</span></span><br><span class="line">SpreadsheetCell* myCellP = <span class="keyword">new</span> <span class="built_in">SpreadsheetCell</span>(<span class="number">5</span>);</span><br><span class="line">SpreadsheetCell* myCellP = <span class="keyword">new</span> <span class="built_in">SpreadsheetCell</span>(<span class="string">&quot;test&quot;</span>);</span><br><span class="line"><span class="function">shared_ptr&lt;SpreadsheetCell&gt; <span class="title">myCellP</span><span class="params">(<span class="keyword">new</span> SpreadsheetCell(<span class="number">5</span>))</span></span>;</span><br><span class="line"><span class="function">shared_ptr&lt;SpreadsheetCell&gt; <span class="title">myCellP</span><span class="params">(<span class="keyword">new</span> SpreadsheetCell(<span class="string">&quot;test&quot;</span>))</span></span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>默认构造函数（零参构造函数）</p>
+<p>创建对象数组时，首先要为所有对象分配连续的内存空间，再为每个对象调用默认的构造函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SpreadsheetCell cells[<span class="number">3</span>]; <span class="comment">// 如果没有默认构造函数这句代码会报错</span></span><br><span class="line">SpreadsheetCell* myCellP = <span class="keyword">new</span> SpreadsheetCell[<span class="number">10</span>]; <span class="comment">// 一样会报错</span></span><br><span class="line">SpreadsheetCell cells[<span class="number">3</span>] = &#123;</span><br><span class="line">      <span class="built_in">SpreadsheetCell</span>(<span class="number">0</span>),</span><br><span class="line">    <span class="built_in">SpreadsheetCell</span>(<span class="number">1</span>),</span><br><span class="line">    <span class="built_in">SpreadsheetCell</span>(<span class="number">2</span>)</span><br><span class="line">&#125;; <span class="comment">// 手动为每个对象调用构造函数，能绕过调用默认构造函数的限制 </span></span><br></pre></td></tr></table></figure>
+
+<p><em>所以如果要创建某个类的对象数组，最好还是定义类的默认构造函数</em></p>
+<p><em>在堆栈中调用默认构造函数时不需要使用圆括号</em></p>
+</li>
+<li><p>构造函数初始化器</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SpreadsheetCell::<span class="built_in">SpreadsheetCell</span>() : <span class="built_in">value</span>(<span class="number">0</span>), <span class="built_in">mString</span>(<span class="string">&quot;&quot;</span>) &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>显示删除构造函数</p>
+<p>如果你想定义一个没有任何构造函数的类，也不想让编译器生成默认的构造函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">      <span class="built_in">MyClass</span>() = <span class="keyword">delete</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p><code>ctor-initializer</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpreadsheetCell</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">      <span class="built_in">SpreadsheetCell</span>(<span class="keyword">double</span> d);</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">      <span class="built_in">SomeClass</span>();</span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">      SpreadsheetCell mCell;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">SomeClass::<span class="built_in">SomeClass</span>() : <span class="built_in">mCell</span>(<span class="number">5.0f</span>) &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>const数据成员，当const变量创建之后无法对其正确赋值，必须在创建的时候提供值。</p>
+</li>
+<li><p>引用数据成员，如果不是指向一个量，引用将无法存在。</p>
+</li>
+<li><p>没有默认后遭函数的对象数据成员，C++会尝试用默认构造函数初始化成员对象，如果不存在就无法初始化这个对象。</p>
+</li>
+<li><p>没有默认构造函数的超类（父类）待定</p>
+</li>
+<li><p><code>ctor-initializer</code>需要注意的是：初始化数据成员的顺序是按照在类中定义的顺序</p>
+</li>
+<li><p>复制构造函数(<code>copy constructor</code>)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpreadsheetCell</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">      <span class="built_in">SpreadsheetCell</span>(<span class="keyword">const</span> SpreadsheetCell&amp; src);</span><br><span class="line">&#125;</span><br><span class="line">SpreadsheetCell::<span class="built_in">SpreadsheetCell</span>(<span class="keyword">const</span> SpreadsheetCell&amp; src): <span class="built_in">mValue</span>(src.mValue), <span class="built_in">mString</span>(src.mString) &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">SpreadsheetCell <span class="title">myCell</span><span class="params">(<span class="number">5</span>)</span></span>;</span><br><span class="line"><span class="function">SpreadsheetCell <span class="title">myCell1</span><span class="params">(myCell)</span></span>; <span class="comment">// 显示地调用赋值构造函数</span></span><br></pre></td></tr></table></figure></li>
+<li><p>按引用传递对象</p>
+<p>为了避免复制对象，可以让函数或者方法采用对象的引用作为参数，按引用传递对象比按值传递对象效率更高，因为只需要复制对象的地址而不需要复制对象的全部内容</p>
+<p>另外按引用传递可以避免对象动态内存分配的问题</p>
+</li>
+<li><p>类内成员初始化器</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C++11才能定义的时候直接初始化成员变量</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">      <span class="keyword">int</span> mInt = <span class="number">1</span>;</span><br><span class="line">      std::string mStr = <span class="string">&quot;test&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// C++11之前只有 ctor-initializer 或者 static const整型成员变量才能在类定义中初始化</span></span><br></pre></td></tr></table></figure></li>
+<li><p>委托构造函数（C++11）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line">  <span class="built_in">MyClass</span>(<span class="keyword">char</span> c) : <span class="built_in">MyClass</span>(<span class="number">1.2</span>) &#123;&#125;</span><br><span class="line">  <span class="built_in">MyClass</span>(<span class="keyword">double</span> d) : <span class="built_in">MyClass</span>(<span class="string">&#x27;m&#x27;</span>) &#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+<li><p>编译器生成构造函数的总结</p>
+<table>
+<thead>
+<tr>
+<th align="center">如果定义了…</th>
+<th align="center">那么编译器会生成…</th>
+<th>然后可以创建一个对象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">没有定义构造函数</td>
+<td align="center">一个零参构造函数，一个复制构造函数</td>
+<td>使用零参构造函数：<br /><code>SpreadsheetCell cell;</code><br />作为另一个对象的副本：<br /><code>SpreadsheetCell myCell(cell);</code></td>
+</tr>
+<tr>
+<td align="center">只定义了零参构造函数</td>
+<td align="center">复制构造函数</td>
+<td>同上；</td>
+</tr>
+<tr>
+<td align="center">只定义了复制构造函数</td>
+<td align="center">不会生成构造函数</td>
+<td>理论上可以复制其他对象，实际上无法创建任何对象；</td>
+</tr>
+<tr>
+<td align="center">只定义一个构造函数（不是复制构造函数），该构造函数具有一个或者多个参数</td>
+<td align="center">复制构造函数</td>
+<td>使用带参数的构造函数：<br /><code>SpreadsheetCell mCell(6);</code><br />作为另一个对象的副本：<br /><code>SpreadsheetCell mCell(cell);</code></td>
+</tr>
+<tr>
+<td align="center">一个零参构造函数，以及一个具有但个参数或者多个参数的构造函数（不是复制构造函数）</td>
+<td align="center">复制构造函数</td>
+<td>使用零参构造函数：<br /><code>SpreadsheetCell cell;</code><br />使用带有参数的构造函数：<br /><code>SpreadsheetCell cell(6);</code><br />作为另一个对象的副本：<br /><code>SpreadsheetCell anotherCell(cell);</code></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="5-如何编写在创建或者销毁对象时执行的代码"><a href="#5-如何编写在创建或者销毁对象时执行的代码" class="headerlink" title="5. 如何编写在创建或者销毁对象时执行的代码"></a>5. 如何编写在创建或者销毁对象时执行的代码</h4><ul>
+<li><p>销毁对象时：对象的析构函数被调用，释放对象占用的内存。</p>
+</li>
+<li><p>当堆栈中的对象超出作用域时，意味着当前的函数、方法或者其他执行的代码块结束，对象会被销毁</p>
+</li>
+<li><p>堆栈上对象销毁的顺序与声明顺序相反</p>
+</li>
+<li><p>堆中分配的对象不会自动销毁，必须使用<code>delete</code>删除对象指针，从而调用析构函数并释放内存</p>
+</li>
+<li><p>复制与赋值（复制构造函数只用在创建对象时，如果已经具有值的对象被改写被称为赋值）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 赋值运算符</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpreadsheetCell</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">      SpreadsheetCell&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> SpreadsheetCell&amp; rhs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="6-如何编写复制对象或者给对象赋值的代码"><a href="#6-如何编写复制对象或者给对象赋值的代码" class="headerlink" title="6. 如何编写复制对象或者给对象赋值的代码"></a>6. 如何编写复制对象或者给对象赋值的代码</h4>
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>Pino</li>
+    <li><strong>本文链接：</strong><a href="https://p1nov.github.io/2021/11/25/C-Learning-blog/index.html" title="https:&#x2F;&#x2F;p1nov.github.io&#x2F;2021&#x2F;11&#x2F;25&#x2F;C-Learning-blog&#x2F;index.html">https:&#x2F;&#x2F;p1nov.github.io&#x2F;2021&#x2F;11&#x2F;25&#x2F;C-Learning-blog&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+          <section class="donate">
+  <div id="qrcode-donate">
+    <img   class="lazyload" data-original="https://pic.izhaoo.com/alipay.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" >
+  </div>
+  <div class="icon">
+    <a href="javascript:;" id="alipay"><i class="iconfont iconalipay"></i></a>
+    <a href="javascript:;" id="wechat"><i class="iconfont iconwechat-fill"></i></a>
+  </div>
+</section>
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%88%9B/" rel="tag">原创</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a></a>
+    <a href="/2021/11/25/libdispatch%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">libdispatch源码解析<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C"><span class="toc-text">C++</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%BC%80%E5%A7%8B"><span class="toc-text">一、开始</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="toc-text">二、面向对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%BE%E8%AE%A1%E5%8F%AF%E9%87%8D%E7%94%A8%E4%BB%A3%E7%A0%81"><span class="toc-text">三、设计可重用代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AF%B9%E8%B1%A1%E5%92%8C%E7%B1%BB"><span class="toc-text">四、对象和类</span></a></li></ol></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="tencent://message/?Menu=yes&uin=1473781785 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="javascript:; "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#09BB07'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconwechat-fill "></i>
+      </a><a 
+        href="https://github.com/P1nov "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:pino.yyx.1026@gmail.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
