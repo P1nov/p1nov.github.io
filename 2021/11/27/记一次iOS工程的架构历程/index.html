@@ -6,12 +6,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Archive - Pino&#39;s technical blog: 2021</title>
+  <title>记一次iOS工程的架构历程 - Pino&#39;s technical blog</title>
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content="iOS, C++, Golang">
-  <meta name="description" content="19年6月毕业于西南科技大学">
+  
   <meta name="author" content="Pino">
   <link rel="icon" href="/images/icons/dynamic_management.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/dynamic_management.png" type="image/png" sizes="32x32">
@@ -152,7 +152,7 @@
       
       
     </div>
-    <div class="center">归档</div>
+    <div class="center">记一次iOS工程的架构历程</div>
     <div class="right">
       <i class="iconfont iconmenu j-navbar-menu"></i>
     </div>
@@ -186,47 +186,93 @@
   </div>
 </nav>
   <main id="main">
-  <section class="archive">
-    <div class="archive-container">
-      <div class="archive-post">
-        <h3 class="archive-total">归档: 5 篇</h3>
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/theme/post-image.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">记一次iOS工程的架构历程</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>November 27, 2021</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>0</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
         
         
-          
-            <h3 class="archive-year">2021 年</h3>
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2021/11/27/%E8%AE%B0%E4%B8%80%E6%AC%A1iOS%E5%B7%A5%E7%A8%8B%E7%9A%84%E6%9E%B6%E6%9E%84%E5%8E%86%E7%A8%8B/">November 27</a>
-            <a class="archive-title" href="/2021/11/27/%E8%AE%B0%E4%B8%80%E6%AC%A1iOS%E5%B7%A5%E7%A8%8B%E7%9A%84%E6%9E%B6%E6%9E%84%E5%8E%86%E7%A8%8B/">记一次iOS工程的架构历程</a>
-          </div>
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>Pino</li>
+    <li><strong>本文链接：</strong><a href="https://p1nov.github.io/2021/11/27/%E8%AE%B0%E4%B8%80%E6%AC%A1iOS%E5%B7%A5%E7%A8%8B%E7%9A%84%E6%9E%B6%E6%9E%84%E5%8E%86%E7%A8%8B/index.html" title="https:&#x2F;&#x2F;p1nov.github.io&#x2F;2021&#x2F;11&#x2F;27&#x2F;%E8%AE%B0%E4%B8%80%E6%AC%A1iOS%E5%B7%A5%E7%A8%8B%E7%9A%84%E6%9E%B6%E6%9E%84%E5%8E%86%E7%A8%8B&#x2F;index.html">https:&#x2F;&#x2F;p1nov.github.io&#x2F;2021&#x2F;11&#x2F;27&#x2F;%E8%AE%B0%E4%B8%80%E6%AC%A1iOS%E5%B7%A5%E7%A8%8B%E7%9A%84%E6%9E%B6%E6%9E%84%E5%8E%86%E7%A8%8B&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+        
+  <nav class="nav">
+    <a></a>
+    <a href="/2021/11/26/RxSwift%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">RxSwift源码解析<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '6103cac8bdaa183ad4f7',
+      clientSecret: '2b8bb374a8112255b2dda01f1a4d6347aabd1883',
+      id: window.location.pathname,
+      repo: 'pino-gitalk',
+      owner: 'P1nov',
+      admin: 'P1nov'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
         
           
-          <div class="archive-item">
-            <a class="archive-date" href="/2021/11/26/RxSwift%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">November 26</a>
-            <a class="archive-title" href="/2021/11/26/RxSwift%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">RxSwift源码解析</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2021/11/25/Algorithm%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/">November 25</a>
-            <a class="archive-title" href="/2021/11/25/Algorithm%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/">Algorithm算法笔记</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2021/11/25/C-Learning-blog/">November 25</a>
-            <a class="archive-title" href="/2021/11/25/C-Learning-blog/">C++学习笔记</a>
-          </div>
-        
-          
-          <div class="archive-item">
-            <a class="archive-date" href="/2021/11/25/libdispatch%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">November 25</a>
-            <a class="archive-title" href="/2021/11/25/libdispatch%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/">libdispatch源码解析</a>
-          </div>
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    
+  </aside>
+
         
       </div>
     </div>
-  </section>
+  </div>
 </main>
   
 
