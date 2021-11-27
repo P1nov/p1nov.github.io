@@ -11,7 +11,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="google" content="notranslate" />
   <meta name="keywords" content="iOS, C++, Golang">
-  <meta name="description" content="Pino的算法笔记">
+  <meta name="description" content="Pino的算法笔记一、滚动数组
+
+1234567891...">
   <meta name="author" content="Pino">
   <link rel="icon" href="/images/icons/dynamic_management.png" type="image/png" sizes="16x16">
   <link rel="icon" href="/images/icons/dynamic_management.png" type="image/png" sizes="32x32">
@@ -198,14 +200,18 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>November 25, 2021</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>9</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>722</span>
     </div>
   </div>
 </section>
     <section class="main">
       <section class="content">
         
-        <h2 id="Pino的算法笔记"><a href="#Pino的算法笔记" class="headerlink" title="Pino的算法笔记"></a>Pino的算法笔记</h2><h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+        <h2 id="Pino的算法笔记"><a href="#Pino的算法笔记" class="headerlink" title="Pino的算法笔记"></a>Pino的算法笔记</h2><h3 id="一、滚动数组"><a href="#一、滚动数组" class="headerlink" title="一、滚动数组"></a>一、滚动数组</h3><img src="/2021/11/25/Algorithm%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/scroll_array_example1.jpg" class="" title="滚动数组算法题">
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line">  <span class="keyword">public</span>:</span><br><span class="line">  	<span class="function"><span class="keyword">int</span> <span class="title">minCostClimbingStairs</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; cost)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">int</span> n = cost.<span class="built_in">size</span>();</span><br><span class="line">      <span class="keyword">int</span> prev = <span class="number">0</span>, curr = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> next = <span class="built_in">min</span>(curr + cost[i - <span class="number">1</span>], prev + cost[i - <span class="number">2</span>]);</span><br><span class="line">        prev = curr;</span><br><span class="line">        curr = next;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> curr;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">  	<span class="comment">// 另一种滚动数组</span></span><br><span class="line">  	<span class="function"><span class="keyword">int</span> <span class="title">minCostClimbingStairs</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; cost)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">int</span> n = cost.<span class="built_in">size</span>();</span><br><span class="line">      <span class="function">vector&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(n + <span class="number">1</span>)</span></span>;</span><br><span class="line">      dp[<span class="number">0</span>] = dp[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        dp[i] = <span class="built_in">min</span>(dp[i - <span class="number">1</span>] + cost[i - <span class="number">1</span>], dp[i - <span class="number">2</span>] + cost[i - <span class="number">2</span>]]);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> dp[n];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
       </section>
       <section class="extra">
         
@@ -268,7 +274,7 @@
           
   <aside class="toc-wrap">
     <h3 class="toc-title">文章目录：</h3>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pino%E7%9A%84%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0"><span class="toc-text">Pino的算法笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text"></span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pino%E7%9A%84%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0"><span class="toc-text">Pino的算法笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%BB%9A%E5%8A%A8%E6%95%B0%E7%BB%84"><span class="toc-text">一、滚动数组</span></a></li></ol></li></ol>
   </aside>
 
         
