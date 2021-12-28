@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<html lang="en" color-mode=light>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>iOS底层学习笔记 - Pino&#39;s technical blog</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate" />
+  <meta name="keywords" content="iOS, C++, Golang">
+  <meta name="description" content="CategoryCategory结构123456789...">
+  <meta name="author" content="Pino">
+  <link rel="icon" href="/images/icons/dynamic_management.png" type="image/png" sizes="16x16">
+  <link rel="icon" href="/images/icons/dynamic_management.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/images/icons/dynamic_management.png" sizes="180x180">
+  <meta rel="mask-icon" href="/images/icons/dynamic_management.svg" color="#333333">
+  
+    <meta rel="msapplication-TileImage" content="/images/icons/dynamic_management.png">
+    <meta rel="msapplication-TileColor" content="#000000">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1445822_p6ry5n7lrr.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css">
+
+  
+
+  
+    
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/xcode.min.css" name="highlight-style" mode="light">
+
+      
+        
+        
+<link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.18.1/styles/solarized-dark.min.css" name="highlight-style" mode="dark">
+
+      
+  
+
+  <script>
+    var CONFIG = window.CONFIG || {};
+    var ZHAOO = window.ZHAOO || {};
+    CONFIG = {
+      isHome: false,
+      fancybox: true,
+      pjax: false,
+      loading: {
+        gif: '/images/theme/loading.gif',
+        lottie: ''
+      },
+      lazyload: {
+        enable: true,
+        only_post: 'false',
+        loading: {
+          gif: '/images/theme/loading.gif',
+          lottie: ''
+        }
+      },
+      donate: {
+        enable: false,
+        alipay: 'https://pic.izhaoo.com/alipay.jpg',
+        wechat: 'https://pic.izhaoo.com/wechat.jpg'
+      },
+      galleries: {
+        enable: true
+      },
+      fab: {
+        enable: true,
+        always_show: false
+      },
+      carrier: {
+        enable: true
+      },
+      daovoice: {
+        enable: false
+      },
+      preview: {
+        background: {
+          default: '',
+          api: ''
+        },
+        motto: {
+          default: '请用你绝对清醒的理智去压抑不该有的情绪',
+          typing: true,
+          api: '',
+          data_contents: ''
+        },
+      },
+      qrcode: {
+        enable: true,
+        type: 'url',
+        image: 'https://pic.izhaoo.com/weapp-code.jpg',
+      },
+      toc: {
+        enable: true
+      },
+      scrollbar: {
+        type: 'default'
+      },
+      notification: {
+        enable: false,
+        delay: 4500,
+        list: '',
+        page_white_list: '',
+        page_black_list: ''
+      },
+      search: {
+        enable: false,
+        path: 'search.xml'
+      }
+    }
+  </script>
+
+  
+
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="lock-screen">
+  <div class="loading" id="loading"></div>
+  
+    
+
+
+  <nav class="navbar">
+    <div class="left">
+      
+        <i class="iconfont iconhome j-navbar-back-home"></i>
+      
+      
+        <i class="iconfont iconqrcode j-navbar-qrcode"></i>
+      
+      
+        <i class="iconfont iconmoono" id="color-toggle" color-toggle="light"></i>
+      
+      
+    </div>
+    <div class="center">iOS底层学习笔记</div>
+    <div class="right">
+      <i class="iconfont iconmenu j-navbar-menu"></i>
+    </div>
+    
+      <div id="qrcode-navbar"></div>
+    
+  </nav>
+
+  
+  
+
+<nav class="menu">
+  <div class="menu-container">
+    <div class="menu-close">
+      <i class="iconfont iconbaseline-close-px"></i>
+    </div>
+    <ul class="menu-content"><li class="menu-item">
+        <a href="/ " class="underline "> 首页</a>
+      </li><li class="menu-item">
+        <a href="/archives " class="underline "> 归档</a>
+      </li><li class="menu-item">
+        <a href="/tags " class="underline "> 标签</a>
+      </li><li class="menu-item">
+        <a href="/categories " class="underline "> 分类</a>
+      </li><li class="menu-item">
+        <a href="/about " class="underline "> 关于</a>
+      </li></ul>
+    
+      <div class="menu-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+    
+  </div>
+</nav>
+  <main id="main">
+  <div class="article-wrap">
+    <div class="row container">
+      <div class="col-xl-3"></div>
+      <div class="col-xl-6"><article class="article">
+  <div class="wrap">
+    <section class="head">
+  <img   class="lazyload" data-original="/images/cover/34008fb6f7c644346008fc654268953d.jpg" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=="  draggable="false">
+  <div class="head-mask">
+    <h1 class="head-title">iOS底层学习笔记</h1>
+    <div class="head-info">
+      <span class="post-info-item"><i class="iconfont iconcalendar"></i>December 22, 2021</span>
+      
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>16445</span>
+    </div>
+  </div>
+</section>
+    <section class="main">
+      <section class="content">
+        
+        <h2 id="Category"><a href="#Category" class="headerlink" title="Category"></a>Category</h2><h5 id="Category结构"><a href="#Category结构" class="headerlink" title="Category结构"></a>Category结构</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">category_t</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name; <span class="comment">// 类名</span></span><br><span class="line">    <span class="keyword">classref_t</span> cls;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">method_list_t</span> *<span class="title">instanceMethods</span>;</span> <span class="comment">// 实例方法列表</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">method_list_t</span> *<span class="title">classMethods</span>;</span> <span class="comment">// 类方法列表</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">protocol_list_t</span> *<span class="title">protocols</span>;</span> <span class="comment">// 协议列表</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">property_list_t</span> *<span class="title">instanceProperties</span>;</span> <span class="comment">// 实例属性列表</span></span><br><span class="line">    <span class="comment">// Fields below this point are not always present on disk.</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">property_list_t</span> *_<span class="title">classProperties</span>;</span> <span class="comment">// 类属性列表</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">method_list_t</span> *<span class="title">methodsForMeta</span><span class="params">(<span class="keyword">bool</span> isMeta)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isMeta) <span class="keyword">return</span> classMethods;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> instanceMethods;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">property_list_t</span> *<span class="title">propertiesForMeta</span><span class="params">(<span class="keyword">bool</span> isMeta, struct header_info *hi)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">protocol_list_t</span> *<span class="title">protocolsForMeta</span><span class="params">(<span class="keyword">bool</span> isMeta)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isMeta) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> protocols;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h5 id="为什么category-中的同名方法会覆盖类中的方法"><a href="#为什么category-中的同名方法会覆盖类中的方法" class="headerlink" title="为什么category 中的同名方法会覆盖类中的方法"></a>为什么<code>category </code>中的同名方法会覆盖类中的方法</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">attachLists</span><span class="params">(List* <span class="keyword">const</span> * addedLists, <span class="keyword">uint32_t</span> addedCount)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (addedCount == <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (hasArray()) &#123;</span><br><span class="line">            <span class="comment">// many lists -&gt; many lists</span></span><br><span class="line">            <span class="keyword">uint32_t</span> oldCount = <span class="built_in">array</span>()-&gt;count;</span><br><span class="line">            <span class="keyword">uint32_t</span> newCount = oldCount + addedCount;</span><br><span class="line">            setArray((<span class="keyword">array_t</span> *)<span class="built_in">realloc</span>(<span class="built_in">array</span>(), <span class="keyword">array_t</span>::byteSize(newCount)));</span><br><span class="line">            <span class="built_in">array</span>()-&gt;count = newCount;</span><br><span class="line">          <span class="comment">// 这里将原来类的方法列表的内存移动到了 addedCount 之后，给分类中的方法空出位置，分类方法在列表中是放在类中方法的前面，所以如果调用方法在方法列表中找到第一个同名方法就会直接调用，导致方法列表中排在后面的方法不会调用</span></span><br><span class="line">            memmove(<span class="built_in">array</span>()-&gt;lists + addedCount, <span class="built_in">array</span>()-&gt;lists, </span><br><span class="line">                    oldCount * <span class="keyword">sizeof</span>(<span class="built_in">array</span>()-&gt;lists[<span class="number">0</span>]));</span><br><span class="line">          <span class="comment">// 将所有的方法列表拷贝到空出来的位置</span></span><br><span class="line">            <span class="built_in">memcpy</span>(<span class="built_in">array</span>()-&gt;lists, addedLists, </span><br><span class="line">                   addedCount * <span class="keyword">sizeof</span>(<span class="built_in">array</span>()-&gt;lists[<span class="number">0</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">list</span>  &amp;&amp;  addedCount == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="comment">// 0 lists -&gt; 1 list</span></span><br><span class="line">            <span class="built_in">list</span> = addedLists[<span class="number">0</span>];</span><br><span class="line">        &#125; </span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 1 list -&gt; many lists</span></span><br><span class="line">            List* oldList = <span class="built_in">list</span>;</span><br><span class="line">            <span class="keyword">uint32_t</span> oldCount = oldList ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">uint32_t</span> newCount = oldCount + addedCount;</span><br><span class="line">            setArray((<span class="keyword">array_t</span> *)<span class="built_in">malloc</span>(<span class="keyword">array_t</span>::byteSize(newCount)));</span><br><span class="line">            <span class="built_in">array</span>()-&gt;count = newCount;</span><br><span class="line">            <span class="keyword">if</span> (oldList) <span class="built_in">array</span>()-&gt;lists[addedCount] = oldList;</span><br><span class="line">            <span class="built_in">memcpy</span>(<span class="built_in">array</span>()-&gt;lists, addedLists, </span><br><span class="line">                   addedCount * <span class="keyword">sizeof</span>(<span class="built_in">array</span>()-&gt;lists[<span class="number">0</span>]));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>保证分类方法优先调用，如果有同名方法，如何调用排在后面的方法？</p>
+<p>使用运行时的特性，找到排在后面的方法的内存地址直接调用。</p>
+<p>分类中的方法的调用顺序：看编译顺序</p>
+<h5 id="静态库中的分类设置"><a href="#静态库中的分类设置" class="headerlink" title="静态库中的分类设置"></a>静态库中的分类设置</h5><p>如果需要将静态库中的分类也能够调用，需要在静态库工程中设置<code>other linker flags</code>为<code>-all_load</code></p>
+<h5 id="为什么Category中不能添加成员变量"><a href="#为什么Category中不能添加成员变量" class="headerlink" title="为什么Category中不能添加成员变量"></a>为什么<code>Category</code>中不能添加成员变量</h5><p>成员变量在编译的时候就会加载进内存中，换句话说就是成员变量的内存布局在编译的时候就已经确定了，而分类是基于运行时的机制，在运行时添加相关的实例方法、类方法、协议等，所以<code>Category</code>不能声明成员变量</p>
+<h3 id="load方法和initialize方法"><a href="#load方法和initialize方法" class="headerlink" title="load方法和initialize方法"></a><code>load</code>方法和<code>initialize</code>方法</h3><h5 id="load什么时候调用"><a href="#load什么时候调用" class="headerlink" title="load什么时候调用"></a>load什么时候调用</h5><p>程序启动的时候调用（程序装载类信息的时候）</p>
+<h5 id="load调用顺序"><a href="#load调用顺序" class="headerlink" title="load调用顺序"></a>load调用顺序</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">OBJC_EXPORT <span class="keyword">void</span> _objc_load_image(HMODULE image, header_info *hinfo)</span><br><span class="line">&#123;</span><br><span class="line">    prepare_load_methods(hinfo);</span><br><span class="line">    call_load_methods();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">call_load_methods</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">bool</span> loading = NO;</span><br><span class="line">    <span class="keyword">bool</span> more_categories;</span><br><span class="line"></span><br><span class="line">    loadMethodLock.assertLocked();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Re-entrant calls do nothing; the outermost call will finish the job.</span></span><br><span class="line">    <span class="keyword">if</span> (loading) <span class="keyword">return</span>;</span><br><span class="line">    loading = YES;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> *pool = objc_autoreleasePoolPush();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="comment">// 1. Repeatedly call class +loads until there aren&#x27;t any more</span></span><br><span class="line">        <span class="comment">// 1. 调用类的load方法直到所有的类都调用完成</span></span><br><span class="line">        <span class="keyword">while</span> (loadable_classes_used &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            call_class_loads();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. Call category +loads ONCE</span></span><br><span class="line">      	<span class="comment">// 2. 调用分类的load方法</span></span><br><span class="line">        more_categories = call_category_loads();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. Run more +loads if there are classes OR more untried categories</span></span><br><span class="line">    &#125; <span class="keyword">while</span> (loadable_classes_used &gt; <span class="number">0</span>  ||  more_categories);</span><br><span class="line"></span><br><span class="line">    objc_autoreleasePoolPop(pool);</span><br><span class="line"></span><br><span class="line">    loading = NO;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="initialize什么时候调用"><a href="#initialize什么时候调用" class="headerlink" title="initialize什么时候调用"></a><code>initialize</code>什么时候调用</h5><p>当该类第一次接收到消息的时候会调用initiallize（或者说第一次使用该类）并且只会调用一次</p>
+<h5 id="initialize方法为什么不用调用super方法"><a href="#initialize方法为什么不用调用super方法" class="headerlink" title="initialize方法为什么不用调用super方法"></a><code>initialize</code>方法为什么不用调用<code>super</code>方法</h5><p>当子类的<code>initialize</code>方法调用时，要保证父类被<code>initialize</code>，所以要会先自动调用父类的<code>initialize</code></p>
+<h5 id="分类中initialize方法会把类中的initialize方法覆盖掉（参考分类同名方法优先于类中同名方法调用）"><a href="#分类中initialize方法会把类中的initialize方法覆盖掉（参考分类同名方法优先于类中同名方法调用）" class="headerlink" title="分类中initialize方法会把类中的initialize方法覆盖掉（参考分类同名方法优先于类中同名方法调用）"></a>分类中<code>initialize</code>方法会把类中的<code>initialize</code>方法覆盖掉（参考分类同名方法优先于类中同名方法调用）</h5><h5 id="load方法与initialzied方法的调用区别"><a href="#load方法与initialzied方法的调用区别" class="headerlink" title="load方法与initialzied方法的调用区别"></a><code>load</code>方法与<code>initialzied</code>方法的调用区别</h5><ul>
+<li><p><code>objc-initialize</code>源码实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">initializeNonMetaClass</span><span class="params">(Class cls)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ASSERT(!cls-&gt;isMetaClass());</span><br><span class="line"></span><br><span class="line">    Class supercls;</span><br><span class="line">    <span class="keyword">bool</span> reallyInitialize = NO;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Make sure super is done initializing BEFORE beginning to initialize cls.</span></span><br><span class="line">    <span class="comment">// See note about deadlock above.</span></span><br><span class="line">    supercls = cls-&gt;superclass;</span><br><span class="line">    <span class="keyword">if</span> (supercls  &amp;&amp;  !supercls-&gt;isInitialized()) &#123;</span><br><span class="line">        initializeNonMetaClass(supercls);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Try to atomically set CLS_INITIALIZING.</span></span><br><span class="line">    SmallVector&lt;_objc_willInitializeClassCallback, <span class="number">1</span>&gt; localWillInitializeFuncs;</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function"><span class="keyword">monitor_locker_t</span> <span class="title">lock</span><span class="params">(classInitLock)</span></span>;</span><br><span class="line">        <span class="keyword">if</span> (!cls-&gt;isInitialized() &amp;&amp; !cls-&gt;isInitializing()) &#123;</span><br><span class="line">            cls-&gt;setInitializing();</span><br><span class="line">            reallyInitialize = YES;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Grab a copy of the will-initialize funcs with the lock held.</span></span><br><span class="line">            localWillInitializeFuncs.initFrom(willInitializeFuncs);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (reallyInitialize) &#123;</span><br><span class="line">        <span class="comment">// We successfully set the CLS_INITIALIZING bit. Initialize the class.</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Record that we&#x27;re initializing this class so we can message it.</span></span><br><span class="line">        _setThisThreadIsInitializingClass(cls);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (MultithreadedForkChild) &#123;</span><br><span class="line">            <span class="comment">// LOL JK we don&#x27;t really call +initialize methods after fork().</span></span><br><span class="line">            performForkChildInitialize(cls, supercls);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> callback : localWillInitializeFuncs)</span><br><span class="line">            callback.f(callback.context, cls);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Send the +initialize message.</span></span><br><span class="line">        <span class="comment">// Note that +initialize is sent to the superclass (again) if </span></span><br><span class="line">        <span class="comment">// this class doesn&#x27;t implement +initialize. 2157218</span></span><br><span class="line">        <span class="keyword">if</span> (PrintInitializing) &#123;</span><br><span class="line">            _objc_inform(<span class="string">&quot;INITIALIZE: thread %p: calling +[%s initialize]&quot;</span>,</span><br><span class="line">                         objc_thread_self(), cls-&gt;nameForLogging());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Exceptions: A +initialize call that throws an exception </span></span><br><span class="line">        <span class="comment">// is deemed to be a complete and successful +initialize.</span></span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="comment">// Only __OBJC2__ adds these handlers. !__OBJC2__ has a</span></span><br><span class="line">        <span class="comment">// bootstrapping problem of this versus CF&#x27;s call to</span></span><br><span class="line">        <span class="comment">// objc_exception_set_functions().</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> __OBJC2__</span></span><br><span class="line">        @<span class="keyword">try</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        &#123;</span><br><span class="line">            callInitialize(cls);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (PrintInitializing) &#123;</span><br><span class="line">                _objc_inform(<span class="string">&quot;INITIALIZE: thread %p: finished +[%s initialize]&quot;</span>,</span><br><span class="line">                             objc_thread_self(), cls-&gt;nameForLogging());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> __OBJC2__</span></span><br><span class="line">        @<span class="keyword">catch</span> (...) &#123;</span><br><span class="line">            <span class="keyword">if</span> (PrintInitializing) &#123;</span><br><span class="line">                _objc_inform(<span class="string">&quot;INITIALIZE: thread %p: +[%s initialize] &quot;</span></span><br><span class="line">                             <span class="string">&quot;threw an exception&quot;</span>,</span><br><span class="line">                             objc_thread_self(), cls-&gt;nameForLogging());</span><br><span class="line">            &#125;</span><br><span class="line">            @<span class="keyword">throw</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        @finally</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// Done initializing.</span></span><br><span class="line">            lockAndFinishInitializing(cls, supercls);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (cls-&gt;isInitializing()) &#123;</span><br><span class="line">        <span class="comment">// We couldn&#x27;t set INITIALIZING because INITIALIZING was already set.</span></span><br><span class="line">        <span class="comment">// If this thread set it earlier, continue normally.</span></span><br><span class="line">        <span class="comment">// If some other thread set it, block until initialize is done.</span></span><br><span class="line">        <span class="comment">// It&#x27;s ok if INITIALIZING changes to INITIALIZED while we&#x27;re here, </span></span><br><span class="line">        <span class="comment">//   because we safely check for INITIALIZED inside the lock </span></span><br><span class="line">        <span class="comment">//   before blocking.</span></span><br><span class="line">        <span class="keyword">if</span> (_thisThreadIsInitializingClass(cls)) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!MultithreadedForkChild) &#123;</span><br><span class="line">            waitForInitializeToComplete(cls);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// We&#x27;re on the child side of fork(), facing a class that</span></span><br><span class="line">            <span class="comment">// was initializing by some other thread when fork() was called.</span></span><br><span class="line">            _setThisThreadIsInitializingClass(cls);</span><br><span class="line">            performForkChildInitialize(cls, supercls);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (cls-&gt;isInitialized()) &#123;</span><br><span class="line">        <span class="comment">// Set CLS_INITIALIZING failed because someone else already </span></span><br><span class="line">        <span class="comment">//   initialized the class. Continue normally.</span></span><br><span class="line">        <span class="comment">// NOTE this check must come AFTER the ISINITIALIZING case.</span></span><br><span class="line">        <span class="comment">// Otherwise: Another thread is initializing this class. ISINITIALIZED </span></span><br><span class="line">        <span class="comment">//   is false. Skip this clause. Then the other thread finishes </span></span><br><span class="line">        <span class="comment">//   initialization and sets INITIALIZING=no and INITIALIZED=yes. </span></span><br><span class="line">        <span class="comment">//   Skip the ISINITIALIZING clause. Die horribly.</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// We shouldn&#x27;t be here. </span></span><br><span class="line">        _objc_fatal(<span class="string">&quot;thread-safe class init in objc runtime is buggy!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">callInitialize</span><span class="params">(Class cls)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ((<span class="keyword">void</span>(*)(Class, SEL))objc_msgSend)(cls, @selector(initialize));</span><br><span class="line">    <span class="keyword">asm</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在源码中可看到最终调用的是<code>void callInitialized(Class cls)</code>方法，这个方法中通过使用<code>obc_msgSend</code>给类对象发消息去调用<code>initialize</code>方法，而使用这种方式调用方法会通过类对象的isa指针找到元类对象再在元类对象的方法列表中查找，而分类的方法是放在其他方法前面的，所以如果在分类中实现了<code>initialize</code>方法的话会覆盖在类中实现的<code>initialize</code>方法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">call_class_loads</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Detach current loadable list.</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">loadable_class</span> *<span class="title">classes</span> =</span> loadable_classes;</span><br><span class="line">    <span class="keyword">int</span> used = loadable_classes_used;</span><br><span class="line">    loadable_classes = nil;</span><br><span class="line">    loadable_classes_allocated = <span class="number">0</span>;</span><br><span class="line">    loadable_classes_used = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Call all +loads for the detached list.</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; used; i++) &#123;</span><br><span class="line">        Class cls = classes[i].cls;</span><br><span class="line">        <span class="keyword">load_method_t</span> load_method = (<span class="keyword">load_method_t</span>)classes[i].method; <span class="comment">// 取出load方法的指针</span></span><br><span class="line">        <span class="keyword">if</span> (!cls) <span class="keyword">continue</span>; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (PrintLoading) &#123;</span><br><span class="line">            _objc_inform(<span class="string">&quot;LOAD: +[%s load]\n&quot;</span>, cls-&gt;nameForLogging());</span><br><span class="line">        &#125;</span><br><span class="line">        (*load_method)(cls, @selector(load)); <span class="comment">// 通过取址调用load方法</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Destroy the detached list.</span></span><br><span class="line">    <span class="keyword">if</span> (classes) <span class="built_in">free</span>(classes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在调用<code>load</code>方法的源码中可以看出，调用<code>load</code>方法的方式是直接拿到<code>load</code>方法的内存地址直接调用</p>
+</li>
+</ul>
+<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><h5 id="内存分配对齐"><a href="#内存分配对齐" class="headerlink" title="内存分配对齐"></a>内存分配对齐</h5><p>在iOS中内存分配都是以16的倍数进行分配</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@interface TestObject: NSObject &#123;</span><br><span class="line">  int _age;</span><br><span class="line">  int _num;</span><br><span class="line">  int _height;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line">@implementation</span><br><span class="line">@end</span><br><span class="line">// 这个OC的对象类被转换为C++，如下</span><br><span class="line">struct TestObject_IMPL &#123;</span><br><span class="line">  Class cls; // 这个类对象为8个字节</span><br><span class="line">  int _age; // 4字节</span><br><span class="line">  int _num; // 4字节</span><br><span class="line">  int _height; // 4字节</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>根据结构体的内存对齐机制应该得出<code>TestObject_IMPL</code>这个结构体的内存大小为24，但是通过<code>size_t size = malloc_size((__bridge const void *)p)</code>得出的结果是32，所以在iOS系统本身的内存分配可知，内存分配是以16的倍数对齐</p>
+<h5 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h5><p>在源码<code>libmalloc</code>中的<code>nano_zone_common.h</code>文件中声明了一个常量</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NANO_MAX_SIZE			256 <span class="comment">/* Buckets sized &#123;16, 32, 48, ..., 256&#125; */</span></span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到注释中的<code>Buckets sized</code>，都是16的倍数，意思是每一个块分配的内存都是16的倍数，最大的一整块分配内存为256，如果超过一块内存超过了256字节则会启用另外的内存分配策略，现有的内存分配策略有：<code>forzen_malloc</code>、<code>legacy_malloc</code>、<code>purgeable_malloc</code>…</p>
+<h2 id="LLVM"><a href="#LLVM" class="headerlink" title="LLVM"></a>LLVM</h2><p>Chris Lattner 创始人（也是Swift之父）</p>
+<h4 id="OC源文件编译的过程"><a href="#OC源文件编译的过程" class="headerlink" title="OC源文件编译的过程"></a>OC源文件编译的过程</h4><p><code>clang -ccc-print-phases main.m</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">0: input, &quot;main.m&quot;, objective-c</span><br><span class="line">1: preprocessor, &#123;0&#125;, objective-c-cpp-output</span><br><span class="line">2: compiler, &#123;1&#125;, ir</span><br><span class="line">3: backend, &#123;2&#125;, assembler</span><br><span class="line">4: assembler, &#123;3&#125;, object</span><br><span class="line">5: linker, &#123;4&#125;, image</span><br><span class="line">6: bind-arch, &quot;x86-64&quot;, &#123;5&#125;, image</span><br></pre></td></tr></table></figure>
+
+<p><code>clang -E main.m</code> 查看预处理器处理过后的代码</p>
+<p><code>clang -fmodules -E -Xclang -dump-tokens main.m</code>词法分析生成token</p>
+<p><code>clang -fmodules -fsyntax-only -Xclang -ast-dump main.m</code> 语法分析生成语法树</p>
+<p><code>clang -S -emit-llvm main.m</code> 生成LLVM IR 文本格式，扩展名为<code>.ll</code></p>
+<p><code>clang -c -emit-llvm main.m</code> 生成LLVM IR 二进制格式，扩展名为<code>.bc</code></p>
+<h4 id="编译LLVM"><a href="#编译LLVM" class="headerlink" title="编译LLVM"></a>编译LLVM</h4><h6 id="cmake、-ninja"><a href="#cmake、-ninja" class="headerlink" title="cmake、 ninja"></a><code>cmake</code>、 <code>ninja</code></h6><ol>
+<li><code>cmake -G Ninja ../llvm -DCMAKE_INSTALL_PREFIX=../llvm_release</code>  编译LLVM</li>
+<li><code>ninja</code></li>
+<li><code>ninja install</code></li>
+</ol>
+<p>生成XCode项目，并使用XCode编译llvm</p>
+<p><code>cmake -G Xcode ../llvm</code> </p>
+<h2 id="iOS-代码混淆"><a href="#iOS-代码混淆" class="headerlink" title="iOS 代码混淆"></a>iOS 代码混淆</h2><h5 id="宏定义进行混淆"><a href="#宏定义进行混淆" class="headerlink" title="宏定义进行混淆"></a>宏定义进行混淆</h5><h5 id="ios-class-guard"><a href="#ios-class-guard" class="headerlink" title="ios-class-guard"></a><code>ios-class-guard</code></h5><ul>
+<li><code>brew install ios-class-guard</code></li>
+<li><code>ios-cloass-guard [options] &lt;mach-o-file&gt;</code></li>
+</ul>
+<h5 id="字符串加密"><a href="#字符串加密" class="headerlink" title="字符串加密"></a>字符串加密</h5><p>使用两次异或（<code>^</code>）得到原始值的原理进行加密</p>
+<h2 id="OC对象的本质"><a href="#OC对象的本质" class="headerlink" title="OC对象的本质"></a>OC对象的本质</h2><h5 id="OC对象是基于C-的什么数据结构实现的"><a href="#OC对象是基于C-的什么数据结构实现的" class="headerlink" title="OC对象是基于C++的什么数据结构实现的"></a>OC对象是基于C++的什么数据结构实现的</h5><ul>
+<li>结构体</li>
+<li><code>clang -rewrite-objc main.m -o main.cpp</code> 将OC文件转成C++文件 </li>
+<li><code>xcrun -sdk -iphoneos clang -arch arm64 -rewrite-objc main.m -o main.cpp</code> 指定iOS平台转成c++代码</li>
+</ul>
+<h5 id="class-getInstanceSize"><a href="#class-getInstanceSize" class="headerlink" title="class_getInstanceSize"></a><code>class_getInstanceSize</code></h5><p>返回成员变量占据的内存大小</p>
+<h5 id="malloc-size-bridge-const-void-obj"><a href="#malloc-size-bridge-const-void-obj" class="headerlink" title="malloc_size((__bridge const void *)obj)"></a>malloc_size((__bridge const void *)obj)</h5><p>返回的这个对象指针指向 的内存大小</p>
+<h5 id="alloc的原理（本质是调用allocWithZone）"><a href="#alloc的原理（本质是调用allocWithZone）" class="headerlink" title="alloc的原理（本质是调用allocWithZone）"></a><code>alloc</code>的原理（本质是调用<code>allocWithZone</code>）</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Call [cls alloc] or [cls allocWithZone:nil], with appropriate </span></span><br><span class="line"><span class="comment">// shortcutting optimizations.</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> ALWAYS_INLINE id</span></span><br><span class="line"><span class="function"><span class="title">callAlloc</span><span class="params">(Class cls, <span class="keyword">bool</span> checkNil, <span class="keyword">bool</span> allocWithZone=<span class="literal">false</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> __OBJC2__</span></span><br><span class="line">    <span class="keyword">if</span> (slowpath(checkNil &amp;&amp; !cls)) <span class="keyword">return</span> nil;</span><br><span class="line">    <span class="keyword">if</span> (fastpath(!cls-&gt;ISA()-&gt;hasCustomAWZ())) &#123;</span><br><span class="line">        <span class="keyword">return</span> _objc_rootAllocWithZone(cls, nil); <span class="comment">// 调用_objc_rootAllocWithZone 方法</span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// No shortcuts available.</span></span><br><span class="line">    <span class="keyword">if</span> (allocWithZone) &#123;</span><br><span class="line">        <span class="keyword">return</span> ((id(*)(id, SEL, struct _NSZone *))objc_msgSend)(cls, @selector(allocWithZone:), nil);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ((id(*)(id, SEL))objc_msgSend)(cls, @selector(alloc));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NEVER_INLINE</span><br><span class="line">id</span><br><span class="line">_objc_rootAllocWithZone(Class cls, <span class="keyword">malloc_zone_t</span> *zone __unused)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// allocWithZone under __OBJC2__ ignores the zone parameter</span></span><br><span class="line">    <span class="keyword">return</span> _class_createInstanceFromZone(cls, <span class="number">0</span>, nil,</span><br><span class="line">                                         OBJECT_CONSTRUCT_CALL_BADALLOC);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> ALWAYS_INLINE id</span><br><span class="line">_class_createInstanceFromZone(Class cls, <span class="keyword">size_t</span> extraBytes, <span class="keyword">void</span> *zone,</span><br><span class="line">                              <span class="keyword">int</span> construct_flags = OBJECT_CONSTRUCT_NONE,</span><br><span class="line">                              <span class="keyword">bool</span> cxxConstruct = <span class="literal">true</span>,</span><br><span class="line">                              <span class="keyword">size_t</span> *outAllocatedSize = nil)</span><br><span class="line">&#123;</span><br><span class="line">    ASSERT(cls-&gt;isRealized());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Read class&#x27;s info bits all at once for performance</span></span><br><span class="line">    <span class="keyword">bool</span> hasCxxCtor = cxxConstruct &amp;&amp; cls-&gt;hasCxxCtor();</span><br><span class="line">    <span class="keyword">bool</span> hasCxxDtor = cls-&gt;hasCxxDtor();</span><br><span class="line">    <span class="keyword">bool</span> fast = cls-&gt;canAllocNonpointer();</span><br><span class="line">    <span class="keyword">size_t</span> size;</span><br><span class="line"></span><br><span class="line">    size = cls-&gt;instanceSize(extraBytes);</span><br><span class="line">    <span class="keyword">if</span> (outAllocatedSize) *outAllocatedSize = size;</span><br><span class="line"></span><br><span class="line">    id obj;</span><br><span class="line">    <span class="keyword">if</span> (zone) &#123;</span><br><span class="line">        obj = (id)malloc_zone_calloc((<span class="keyword">malloc_zone_t</span> *)zone, <span class="number">1</span>, size);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        obj = (id)<span class="built_in">calloc</span>(<span class="number">1</span>, size);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (slowpath(!obj)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (construct_flags &amp; OBJECT_CONSTRUCT_CALL_BADALLOC) &#123;</span><br><span class="line">            <span class="keyword">return</span> _objc_callBadAllocHandler(cls);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> nil;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!zone &amp;&amp; fast) &#123;</span><br><span class="line">        obj-&gt;initInstanceIsa(cls, hasCxxDtor);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Use raw pointer isa on the assumption that they might be</span></span><br><span class="line">        <span class="comment">// doing something weird with the zone or RR.</span></span><br><span class="line">        obj-&gt;initIsa(cls);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fastpath(!hasCxxCtor)) &#123;</span><br><span class="line">        <span class="keyword">return</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    construct_flags |= OBJECT_CONSTRUCT_FREE_ONFAILURE;</span><br><span class="line">    <span class="keyword">return</span> object_cxxConstructFromClass(obj, cls, construct_flags);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">instanceSize</span><span class="params">(<span class="keyword">size_t</span> extraBytes)</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (fastpath(cache.hasFastInstanceSize(extraBytes))) &#123;</span><br><span class="line">        <span class="keyword">return</span> cache.fastInstanceSize(extraBytes);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">size_t</span> size = alignedInstanceSize() + extraBytes;</span><br><span class="line">    <span class="comment">// CF requires all objects be at least 16 bytes.</span></span><br><span class="line">    <span class="keyword">if</span> (size &lt; <span class="number">16</span>) size = <span class="number">16</span>; <span class="comment">// 内存分配小于16 直接分配成16</span></span><br><span class="line">    <span class="keyword">return</span> size;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="NSObject-对象占用了多少内存"><a href="#NSObject-对象占用了多少内存" class="headerlink" title="NSObject 对象占用了多少内存"></a>NSObject 对象占用了多少内存</h5><ul>
+<li>系统分配了最少16个字节给NSObject对象（使用<code>malloc_size</code>方法来获取）</li>
+<li>但是NSObject对象内部只使用了8个字节的空间（使用<code>class_getInstanceSize</code>获取）</li>
+</ul>
+<h5 id="属性和方法"><a href="#属性和方法" class="headerlink" title="属性和方法"></a>属性和方法</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@interface ObjectiveCLearning : NSObject &#123;</span><br><span class="line">    NSString *_name;</span><br><span class="line">&#125;</span><br><span class="line">@property (nonatomic, assign) NSInteger age;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<p>将以上代码转换成C++代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _REWRITER_typedef_ObjectiveCLearning</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _REWRITER_typedef_ObjectiveCLearning</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">objc_object</span> <span class="title">ObjectiveCLearning</span>;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span>&#125; _objc_exc_ObjectiveCLearning;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> OBJC_IVAR_$_ObjectiveCLearning$_age;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ObjectiveCLearning_IMPL</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">NSObject_IMPL</span> <span class="title">NSObject_IVARS</span>;</span></span><br><span class="line">	NSString *_name;</span><br><span class="line">	NSInteger _age;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// @property (nonatomic, assign) NSInteger age;</span></span><br><span class="line"><span class="comment">/* @end */</span></span><br><span class="line"><span class="comment">// @implementation ObjectiveCLearning</span></span><br><span class="line"><span class="keyword">static</span> NSInteger _I_ObjectiveCLearning_age(ObjectiveCLearning * self, SEL _cmd) &#123; <span class="keyword">return</span> (*(NSInteger *)((<span class="keyword">char</span> *)self + OBJC_IVAR_$_ObjectiveCLearning$_age)); &#125;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> _I_ObjectiveCLearning_setAge_(ObjectiveCLearning * self, SEL _cmd, NSInteger age) &#123; (*(NSInteger *)((<span class="keyword">char</span> *)self + OBJC_IVAR_$_ObjectiveCLearning$_age)) = age; &#125;</span><br><span class="line"><span class="comment">// @end</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到<code>@implementation ObjectiveCLearning</code>中生成了一个<code>_I_ObjectiveCLearning_age</code>和一个<code>_I_ObjectiveCLearning_setAge_</code>方法，所以<code>@property</code>属性定义会自动的生成成员变量<code>_age</code>和<code>setter/getter</code>方法<code>setAge</code>和<code>age</code>方法，所以属性=成员变量+<code>setter/getter</code>方法</p>
+<h5 id="类对象"><a href="#类对象" class="headerlink" title="类对象"></a>类对象</h5><p>同一个类的类对象在内存中只会存在一份</p>
+<p><code>class</code>方法返回的始终是类对象（不管调用多少次）</p>
+<h5 id="元类对象"><a href="#元类对象" class="headerlink" title="元类对象"></a>元类对象</h5><p><code>object_getClass([NSObject class])</code></p>
+<p><code>class_isMetaClass([NSObject class])</code> 判断是否是元类对象</p>
+<h5 id="isa指针"><a href="#isa指针" class="headerlink" title="isa指针"></a><code>isa</code>指针</h5><ul>
+<li>实例对象的<code>isa</code>指针指向类对象</li>
+<li>类对象的<code>isa</code>指针指向元类对象</li>
+</ul>
+<h5 id="super-class指针"><a href="#super-class指针" class="headerlink" title="super-class指针"></a><code>super-class</code>指针</h5><ul>
+<li>类对象的super-class指针指向父类的类对象</li>
+<li>元类对象的super-class指针指向父类的元类对象</li>
+</ul>
+
+      </section>
+      <section class="extra">
+        
+          <ul class="copyright">
+  
+    <li><strong>本文作者：</strong>Pino</li>
+    <li><strong>本文链接：</strong><a href="https://p1nov.github.io/2021/12/22/iOS%E5%BA%95%E5%B1%82%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html" title="https:&#x2F;&#x2F;p1nov.github.io&#x2F;2021&#x2F;12&#x2F;22&#x2F;iOS%E5%BA%95%E5%B1%82%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0&#x2F;index.html">https:&#x2F;&#x2F;p1nov.github.io&#x2F;2021&#x2F;12&#x2F;22&#x2F;iOS%E5%BA%95%E5%B1%82%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0&#x2F;index.html</a></li>
+    <li><strong>版权声明：</strong>本博客所有文章均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" title="BY-NC-SA" target="_blank" rel="noopener">BY-NC-SA</a> 许可协议，转载请注明出处！</li>
+  
+</ul>
+        
+        
+        
+  <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%9F%E5%88%9B/" rel="tag">原创</a></li></ul> 
+
+        
+  <nav class="nav">
+    <a></a>
+    <a href="/2021/12/21/iOS%E7%AC%94%E8%AE%B0/">iOS笔记<i class="iconfont iconright"></i></a>
+  </nav>
+
+      </section>
+      
+        <section class="comments">
+  
+    <div class="btn" id="comments-btn">查看评论</div>
+  
+  
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk" class="gitalk"></div>
+<script defer src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  window.onload = function () {
+    var gitalk = new Gitalk({
+      clientID: '6103cac8bdaa183ad4f7',
+      clientSecret: '2b8bb374a8112255b2dda01f1a4d6347aabd1883',
+      id: window.location.pathname,
+      repo: 'pino-gitalk',
+      owner: 'P1nov',
+      admin: 'P1nov'
+    });
+    if ( true ) {
+      $("#comments-btn").on("click", function () {
+        $(this).hide();
+        gitalk.render('gitalk');
+      });
+    } else {
+      gitalk.render('gitalk');
+    }
+  }
+</script>
+
+</section>
+      
+    </section>
+  </div>
+</article></div>
+      <div class="col-xl-3">
+        
+          
+  <aside class="toc-wrap">
+    <h3 class="toc-title">文章目录：</h3>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Category"><span class="toc-text">Category</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Category%E7%BB%93%E6%9E%84"><span class="toc-text">Category结构</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88category-%E4%B8%AD%E7%9A%84%E5%90%8C%E5%90%8D%E6%96%B9%E6%B3%95%E4%BC%9A%E8%A6%86%E7%9B%96%E7%B1%BB%E4%B8%AD%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">为什么category 中的同名方法会覆盖类中的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%AD%E7%9A%84%E5%88%86%E7%B1%BB%E8%AE%BE%E7%BD%AE"><span class="toc-text">静态库中的分类设置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88Category%E4%B8%AD%E4%B8%8D%E8%83%BD%E6%B7%BB%E5%8A%A0%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F"><span class="toc-text">为什么Category中不能添加成员变量</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#load%E6%96%B9%E6%B3%95%E5%92%8Cinitialize%E6%96%B9%E6%B3%95"><span class="toc-text">load方法和initialize方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#load%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%B0%83%E7%94%A8"><span class="toc-text">load什么时候调用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#load%E8%B0%83%E7%94%A8%E9%A1%BA%E5%BA%8F"><span class="toc-text">load调用顺序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#initialize%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%B0%83%E7%94%A8"><span class="toc-text">initialize什么时候调用</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#initialize%E6%96%B9%E6%B3%95%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8%E8%B0%83%E7%94%A8super%E6%96%B9%E6%B3%95"><span class="toc-text">initialize方法为什么不用调用super方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%86%E7%B1%BB%E4%B8%ADinitialize%E6%96%B9%E6%B3%95%E4%BC%9A%E6%8A%8A%E7%B1%BB%E4%B8%AD%E7%9A%84initialize%E6%96%B9%E6%B3%95%E8%A6%86%E7%9B%96%E6%8E%89%EF%BC%88%E5%8F%82%E8%80%83%E5%88%86%E7%B1%BB%E5%90%8C%E5%90%8D%E6%96%B9%E6%B3%95%E4%BC%98%E5%85%88%E4%BA%8E%E7%B1%BB%E4%B8%AD%E5%90%8C%E5%90%8D%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%EF%BC%89"><span class="toc-text">分类中initialize方法会把类中的initialize方法覆盖掉（参考分类同名方法优先于类中同名方法调用）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#load%E6%96%B9%E6%B3%95%E4%B8%8Einitialzied%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%94%A8%E5%8C%BA%E5%88%AB"><span class="toc-text">load方法与initialzied方法的调用区别</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="toc-text">内存分配</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%AF%B9%E9%BD%90"><span class="toc-text">内存分配对齐</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">源码分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LLVM"><span class="toc-text">LLVM</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#OC%E6%BA%90%E6%96%87%E4%BB%B6%E7%BC%96%E8%AF%91%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-text">OC源文件编译的过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%96%E8%AF%91LLVM"><span class="toc-text">编译LLVM</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iOS-%E4%BB%A3%E7%A0%81%E6%B7%B7%E6%B7%86"><span class="toc-text">iOS 代码混淆</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AE%8F%E5%AE%9A%E4%B9%89%E8%BF%9B%E8%A1%8C%E6%B7%B7%E6%B7%86"><span class="toc-text">宏定义进行混淆</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ios-class-guard"><span class="toc-text">ios-class-guard</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8A%A0%E5%AF%86"><span class="toc-text">字符串加密</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OC%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="toc-text">OC对象的本质</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#OC%E5%AF%B9%E8%B1%A1%E6%98%AF%E5%9F%BA%E4%BA%8EC-%E7%9A%84%E4%BB%80%E4%B9%88%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="toc-text">OC对象是基于C++的什么数据结构实现的</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#class-getInstanceSize"><span class="toc-text">class_getInstanceSize</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#malloc-size-bridge-const-void-obj"><span class="toc-text">malloc_size((__bridge const void *)obj)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#alloc%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%88%E6%9C%AC%E8%B4%A8%E6%98%AF%E8%B0%83%E7%94%A8allocWithZone%EF%BC%89"><span class="toc-text">alloc的原理（本质是调用allocWithZone）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#NSObject-%E5%AF%B9%E8%B1%A1%E5%8D%A0%E7%94%A8%E4%BA%86%E5%A4%9A%E5%B0%91%E5%86%85%E5%AD%98"><span class="toc-text">NSObject 对象占用了多少内存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="toc-text">属性和方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%B1%BB%E5%AF%B9%E8%B1%A1"><span class="toc-text">类对象</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%83%E7%B1%BB%E5%AF%B9%E8%B1%A1"><span class="toc-text">元类对象</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#isa%E6%8C%87%E9%92%88"><span class="toc-text">isa指针</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#super-class%E6%8C%87%E9%92%88"><span class="toc-text">super-class指针</span></a></li></ol></li></ol></li></ol></li></ol>
+  </aside>
+
+        
+      </div>
+    </div>
+  </div>
+</main>
+  
+
+<footer class="footer">
+  <div class="footer-social"><a 
+        href="tencent://message/?Menu=yes&uin=1473781785 "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#12B7F5'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconQQ "></i>
+      </a><a 
+        href="javascript:; "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#09BB07'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconwechat-fill "></i>
+      </a><a 
+        href="https://github.com/P1nov "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color= '#9f7be1'" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  icongithub-fill "></i>
+      </a><a 
+        href="mailto:pino.yyx.1026@gmail.com "
+        target="_blank"
+        class="footer-social-item"
+        onMouseOver="this.style.color=#FF3B00" 
+        onMouseOut="this.style.color='#33333D'">
+          <i class="iconfont  iconmail"></i>
+      </a></div>
+  
+    <div class="footer-copyright"><p>Powered by <a target="_blank" href="https://hexo.io">Hexo</a>  |  Theme - <a target="_blank" href="https://github.com/izhaoo/hexo-theme-zhaoo">zhaoo</a></p></div>
+  
+</footer>
+  
+      <div class="fab fab-plus">
+    <i class="iconfont iconplus"></i>
+  </div>
+  
+  
+  
+  <div class="fab fab-up">
+    <i class="iconfont iconcaret-up"></i>
+  </div>
+  
+  
+  
+    
+<script src="/js/color-mode.js"></script>
+
+  
+  
+</body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+
+
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+  
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+
+
+
+
+<script src="/js/utils.js"></script>
+<script src="/js/script.js"></script>
+
+
+
+
+
+
+
+  <script>
+    (function () {
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+      } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
