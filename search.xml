@@ -1328,10 +1328,50 @@
 <h5 id="isa指针"><a href="#isa指针" class="headerlink" title="isa指针"></a><code>isa</code>指针</h5><ul>
 <li>实例对象的<code>isa</code>指针指向类对象</li>
 <li>类对象的<code>isa</code>指针指向元类对象</li>
+<li>元类对象的<code>isa</code>指针指向基类的元类对象</li>
+<li>基类的元类对象的<code>isa</code>指针指向自己</li>
 </ul>
 <h5 id="super-class指针"><a href="#super-class指针" class="headerlink" title="super-class指针"></a><code>super-class</code>指针</h5><ul>
 <li>类对象的super-class指针指向父类的类对象</li>
 <li>元类对象的super-class指针指向父类的元类对象</li>
+<li>基类的元类对象的super-class指针指向基类的类对象</li>
+<li>如果没有父类，则super-class指针为nil（基类的元类对象除外）</li>
+</ul>
+<h5 id="方法调用的轨迹"><a href="#方法调用的轨迹" class="headerlink" title="方法调用的轨迹"></a>方法调用的轨迹</h5><h6 id="实例方法"><a href="#实例方法" class="headerlink" title="实例方法"></a>实例方法</h6><ul>
+<li>通过实例对象的isa指针找到类对象，在类对象的方法列表中找方法</li>
+<li>如果没找到则通过类对象的super-class指针找到类对象的父类的类对象</li>
+<li>…</li>
+<li>直到super-class指针为nil</li>
+</ul>
+<h6 id="类方法"><a href="#类方法" class="headerlink" title="类方法"></a>类方法</h6><ul>
+<li>通过类对象的isa指针找到元类对象，在元类对象的方法类表中找</li>
+<li>如果没有找到则通过元类对象的super-class指针找到元类对象的父类的元类对象</li>
+<li>…</li>
+<li>直到找到基类的元类对象，如果仍然没有则会通过super-class指针找到基类的类对象中并在基类的类对象中查找方法</li>
+<li>如果还没有则通过基类的类对象的super-class指针（为nil）</li>
+</ul>
+<h2 id="KVO"><a href="#KVO" class="headerlink" title="KVO"></a>KVO</h2><h5 id="本质"><a href="#本质" class="headerlink" title="本质"></a>本质</h5><ul>
+<li>利用Runtime的API动态生成一个子类，并且让实例对象的isa指针指向这个新创建的类</li>
+<li>当修改实例对象的时候，会调用Foundation框架的一个<code>_NSSetXXXValueAndNotify</code>函数<ul>
+<li><code>willChangeValueForKey:</code></li>
+<li>调用<code>super</code>的<code>setter</code></li>
+<li><code>didChangeValueForKey:</code><ul>
+<li>内部会触发<code>Observer</code>的监听方法：<code>observeValueForKeyPath...</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="如何手动触发KVO"><a href="#如何手动触发KVO" class="headerlink" title="如何手动触发KVO"></a>如何手动触发KVO</h5><ul>
+<li>手动调用<code>willChangeValueForKey</code></li>
+<li>手动调用<code>didChangeValueForKey</code>（在<code>didChangeValueForKey</code>会判断是否调用了<code>willChangeValueForKey</code>），内部会触发<code>Observer</code>的监听方法</li>
+</ul>
+<h2 id="KVC"><a href="#KVC" class="headerlink" title="KVC"></a>KVC</h2><h5 id="KVC可以触发KVO"><a href="#KVC可以触发KVO" class="headerlink" title="KVC可以触发KVO"></a>KVC可以触发KVO</h5><ul>
+<li><code>setValueForKey:</code>通过<code>key</code>找到<code>setKey</code>的<code>setter</code>方法，如果有这个<code>setter</code>方法的话就会直接调用这个<code>setter</code>方法（只要方法存在，有没有声明属性都无所谓）</li>
+<li>如果上述的<code>setter</code>方法不存在就会寻找<code>_setKey</code>的方法</li>
+<li>如果上述的两个方法都没有找到就会调用<code>accessINstanceVariablesDirectory</code>（能否直接访问成员变量 BOOL），如果为NO则不允许直接访问成员变量，就会调用<code>setValue:forUndefinedKey:</code>方法并抛出异常<code>NSUnknownKeyException</code></li>
+<li>如果为YES，则会按照<code>_key/_isKey/key/isKey</code>这种顺序去查找成员变量，如果找到了则会直接赋值</li>
+<li>如果仍然没找到则会调用<code>setValue:forUndefinedKey:</code>并抛出异常</li>
 </ul>
 ]]></content>
       <categories>
