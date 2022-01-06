@@ -1254,6 +1254,11 @@
 <p>分类中的方法的调用顺序：看编译顺序</p>
 <h5 id="静态库中的分类设置"><a href="#静态库中的分类设置" class="headerlink" title="静态库中的分类设置"></a>静态库中的分类设置</h5><p>如果需要将静态库中的分类也能够调用，需要在静态库工程中设置<code>other linker flags</code>为<code>-all_load</code></p>
 <h5 id="为什么Category中不能添加成员变量"><a href="#为什么Category中不能添加成员变量" class="headerlink" title="为什么Category中不能添加成员变量"></a>为什么<code>Category</code>中不能添加成员变量</h5><p>成员变量在编译的时候就会加载进内存中，换句话说就是成员变量的内存布局在编译的时候就已经确定了，而分类是基于运行时的机制，在运行时添加相关的实例方法、类方法、协议等，所以<code>Category</code>不能声明成员变量</p>
+<h5 id="Category的加载处理过程"><a href="#Category的加载处理过程" class="headerlink" title="Category的加载处理过程"></a>Category的加载处理过程</h5><ul>
+<li>通过<code>runtime</code>加载某个类的所有<code>Category</code>的数据</li>
+<li>把所有<code>Category</code>的方法、属性、协议数据合并成一个大的数组（后面参与编译的分类数据会在数组的前面）</li>
+<li>将合并过后的分类数据（方法、属性、协议）插入到类原来的数据的前面</li>
+</ul>
 <h3 id="load方法和initialize方法"><a href="#load方法和initialize方法" class="headerlink" title="load方法和initialize方法"></a><code>load</code>方法和<code>initialize</code>方法</h3><h5 id="load什么时候调用"><a href="#load什么时候调用" class="headerlink" title="load什么时候调用"></a>load什么时候调用</h5><p>程序启动的时候调用（程序装载类信息的时候）</p>
 <h5 id="load调用顺序"><a href="#load调用顺序" class="headerlink" title="load调用顺序"></a>load调用顺序</h5><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">OBJC_EXPORT <span class="keyword">void</span> _objc_load_image(HMODULE image, header_info *hinfo)</span><br><span class="line">&#123;</span><br><span class="line">    prepare_load_methods(hinfo);</span><br><span class="line">    call_load_methods();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">call_load_methods</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">bool</span> loading = NO;</span><br><span class="line">    <span class="keyword">bool</span> more_categories;</span><br><span class="line"></span><br><span class="line">    loadMethodLock.assertLocked();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Re-entrant calls do nothing; the outermost call will finish the job.</span></span><br><span class="line">    <span class="keyword">if</span> (loading) <span class="keyword">return</span>;</span><br><span class="line">    loading = YES;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> *pool = objc_autoreleasePoolPush();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="comment">// 1. Repeatedly call class +loads until there aren&#x27;t any more</span></span><br><span class="line">        <span class="comment">// 1. 调用类的load方法直到所有的类都调用完成</span></span><br><span class="line">        <span class="keyword">while</span> (loadable_classes_used &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            call_class_loads();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. Call category +loads ONCE</span></span><br><span class="line">      	<span class="comment">// 2. 调用分类的load方法</span></span><br><span class="line">        more_categories = call_category_loads();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. Run more +loads if there are classes OR more untried categories</span></span><br><span class="line">    &#125; <span class="keyword">while</span> (loadable_classes_used &gt; <span class="number">0</span>  ||  more_categories);</span><br><span class="line"></span><br><span class="line">    objc_autoreleasePoolPop(pool);</span><br><span class="line"></span><br><span class="line">    loading = NO;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -1267,6 +1272,28 @@
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">call_class_loads</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Detach current loadable list.</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">loadable_class</span> *<span class="title">classes</span> =</span> loadable_classes;</span><br><span class="line">    <span class="keyword">int</span> used = loadable_classes_used;</span><br><span class="line">    loadable_classes = nil;</span><br><span class="line">    loadable_classes_allocated = <span class="number">0</span>;</span><br><span class="line">    loadable_classes_used = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Call all +loads for the detached list.</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; used; i++) &#123;</span><br><span class="line">        Class cls = classes[i].cls;</span><br><span class="line">        <span class="keyword">load_method_t</span> load_method = (<span class="keyword">load_method_t</span>)classes[i].method; <span class="comment">// 取出load方法的指针</span></span><br><span class="line">        <span class="keyword">if</span> (!cls) <span class="keyword">continue</span>; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (PrintLoading) &#123;</span><br><span class="line">            _objc_inform(<span class="string">&quot;LOAD: +[%s load]\n&quot;</span>, cls-&gt;nameForLogging());</span><br><span class="line">        &#125;</span><br><span class="line">        (*load_method)(cls, @selector(load)); <span class="comment">// 通过取址调用load方法</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Destroy the detached list.</span></span><br><span class="line">    <span class="keyword">if</span> (classes) <span class="built_in">free</span>(classes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>在调用<code>load</code>方法的源码中可以看出，调用<code>load</code>方法的方式是直接拿到<code>load</code>方法的内存地址直接调用</p>
+</li>
+</ul>
+<h6 id="initialize方法的调用细节"><a href="#initialize方法的调用细节" class="headerlink" title="initialize方法的调用细节"></a><code>initialize</code>方法的调用细节</h6><p>  根据尝试发现initialize调用是使用的<code>objc_msgSend</code>来调用所以可以得到一种思路，在源码中会先去根据isa指针找到类对象或者元类对象，再到方法列表中查找方法</p>
+<p>  源码分析：</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">Method <span class="title">class_getInstanceMethod</span><span class="params">(Class cls, SEL sel)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!cls  ||  !sel) <span class="keyword">return</span> nil;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// This deliberately avoids +initialize because it historically did so.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// This implementation is a bit weird because it&#x27;s the only place that </span></span><br><span class="line">    <span class="comment">// wants a Method instead of an IMP.</span></span><br><span class="line"></span><br><span class="line">    Method meth;</span><br><span class="line">    meth = _cache_getMethod(cls, sel, _objc_msgForward_impcache);</span><br><span class="line">    <span class="keyword">if</span> (meth == (Method)<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// Cache contains forward:: . Stop searching.</span></span><br><span class="line">        <span class="keyword">return</span> nil;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (meth) &#123;</span><br><span class="line">        <span class="keyword">return</span> meth;</span><br><span class="line">    &#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment">// Search method lists, try method resolver, etc.</span></span><br><span class="line">    lookUpImpOrForward(nil, sel, cls, LOOKUP_INITIALIZE | LOOKUP_RESOLVER); <span class="comment">// 这句代码继续查找方法</span></span><br><span class="line"></span><br><span class="line">    meth = _cache_getMethod(cls, sel, _objc_msgForward_impcache);</span><br><span class="line">    <span class="keyword">if</span> (meth == (Method)<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// Cache contains forward:: . Stop searching.</span></span><br><span class="line">        <span class="keyword">return</span> nil;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (meth) &#123;</span><br><span class="line">        <span class="keyword">return</span> meth;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> _class_getMethod(cls, sel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  <code>lookUpImpOrForward</code>方法中有这样一段代码<code>initializeNonMetaClass</code>，这段逻辑可以看出如果类的<code>initialize</code>方法如果没有调用就会进行调用<code>initialize</code>方法</p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Check for +initialize</span></span><br><span class="line">    <span class="keyword">if</span> ((behavior &amp; LOOKUP_INITIALIZE)  &amp;&amp;  !cls-&gt;isInitialized()) &#123;</span><br><span class="line">        initializeNonMetaClass (_class_getNonMetaClass(cls, inst));</span><br><span class="line">        <span class="comment">// If sel == initialize, initializeNonMetaClass will send +initialize </span></span><br><span class="line">        <span class="comment">// and then the messenger will send +initialize again after this </span></span><br><span class="line">        <span class="comment">// procedure finishes. Of course, if this is not being called </span></span><br><span class="line">        <span class="comment">// from the messenger then it won&#x27;t happen. 2778172</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>  <code>initializeNonMetaClass</code></p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">   <span class="comment">// Make sure super is done initializing BEFORE beginning to initialize cls.</span></span><br><span class="line"><span class="comment">// 这个注释意思是确保父类在当前类的initialize调用之前已经调用initialize</span></span><br><span class="line">   <span class="comment">// See note about deadlock above.</span></span><br><span class="line">   supercls = cls-&gt;superclass;</span><br><span class="line">   <span class="keyword">if</span> (supercls  &amp;&amp;  !supercls-&gt;isInitialized()) &#123;</span><br><span class="line">       initializeNonMetaClass(supercls);</span><br><span class="line">   &#125;</span><br><span class="line">...</span><br><span class="line">   &#123;</span><br><span class="line">       callInitialize(cls);</span><br><span class="line">       <span class="keyword">if</span> (PrintInitializing) &#123;</span><br><span class="line">           _objc_inform(<span class="string">&quot;INITIALIZE: thread %p: finished +[%s initialize]&quot;</span>,</span><br><span class="line">                        objc_thread_self(), cls-&gt;nameForLogging());</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p>  这里会递归调用<code>initializeNonMetaClass</code>，逻辑是如果有父类才会去递归调用（直到<code>super-class</code>指针为空），所以可以看出父类的initialize方法会优先调用之后再调用子类的initialize，如果<code>super-class</code>指针为空时会继续执行下面的代码开始<code>callInitialize</code></p>
+  <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">callInitialize</span><span class="params">(Class cls)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ((<span class="keyword">void</span>(*)(Class, SEL))objc_msgSend)(cls, @selector(initialize));</span><br><span class="line">    <span class="keyword">asm</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  这里就可以看出<code>initialize</code>方法是使用<code>objc_msgSend</code>来调用</p>
+<h6 id="initialize的注意点"><a href="#initialize的注意点" class="headerlink" title="initialize的注意点"></a>initialize的注意点</h6><ul>
+<li><p><code>initialize</code>方法是通过<code>objc_msgSend</code>方法调用</p>
+<ul>
+<li>子类的<code>initialize</code>方法没有实现，就会调用父类的<code>initialize</code>，所以父类的<code>initialize</code>方法可能会调用多次</li>
+<li>分类的<code>initialize</code>方法会覆盖原来类的<code>initialize</code>方法</li>
+</ul>
 </li>
 </ul>
 <h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><h5 id="内存分配对齐"><a href="#内存分配对齐" class="headerlink" title="内存分配对齐"></a>内存分配对齐</h5><p>在iOS中内存分配都是以16的倍数进行分配</p>
@@ -1301,7 +1328,7 @@
 <h2 id="OC对象的本质"><a href="#OC对象的本质" class="headerlink" title="OC对象的本质"></a>OC对象的本质</h2><h5 id="OC对象是基于C-的什么数据结构实现的"><a href="#OC对象是基于C-的什么数据结构实现的" class="headerlink" title="OC对象是基于C++的什么数据结构实现的"></a>OC对象是基于C++的什么数据结构实现的</h5><ul>
 <li>结构体</li>
 <li><code>clang -rewrite-objc main.m -o main.cpp</code> 将OC文件转成C++文件 </li>
-<li><code>xcrun -sdk -iphoneos clang -arch arm64 -rewrite-objc main.m -o main.cpp</code> 指定iOS平台转成c++代码</li>
+<li><code>xcrun -sdk iphoneos clang -arch arm64 -rewrite-objc main.m -o main.cpp</code> 指定iOS平台转成c++代码</li>
 </ul>
 <h5 id="class-getInstanceSize"><a href="#class-getInstanceSize" class="headerlink" title="class_getInstanceSize"></a><code>class_getInstanceSize</code></h5><p>返回成员变量占据的内存大小</p>
 <h5 id="malloc-size-bridge-const-void-obj"><a href="#malloc-size-bridge-const-void-obj" class="headerlink" title="malloc_size((__bridge const void *)obj)"></a>malloc_size((__bridge const void *)obj)</h5><p>返回的这个对象指针指向 的内存大小</p>
@@ -1373,6 +1400,112 @@
 <li>如果为YES，则会按照<code>_key/_isKey/key/isKey</code>这种顺序去查找成员变量，如果找到了则会直接赋值</li>
 <li>如果仍然没找到则会调用<code>setValue:forUndefinedKey:</code>并抛出异常</li>
 </ul>
+<h5 id="KVC-取值"><a href="#KVC-取值" class="headerlink" title="KVC 取值"></a>KVC 取值</h5><ul>
+<li>按照<code>getKey</code>、<code>key</code>、<code>isKey</code>、<code>_key</code>的顺序去寻找方法</li>
+<li>如果四个方法都不存在则会去访问成员变量，依然还是按照<code>_key/_isKey/key/isKey</code>的顺序去寻找成员变量</li>
+<li>如果不允许访问成员变量或者这几个成员变量都不存在则会调用<code>valueForUndefinedKey:</code>方法抛出异常</li>
+</ul>
+<h2 id="Category-的关联对象"><a href="#Category-的关联对象" class="headerlink" title="Category 的关联对象"></a>Category 的关联对象</h2><h5 id="实现关联对象技术的核心对象"><a href="#实现关联对象技术的核心对象" class="headerlink" title="实现关联对象技术的核心对象"></a>实现关联对象技术的核心对象</h5><ul>
+<li>AssociationsManager</li>
+<li>AssociationsHashMap</li>
+<li>ObjectAssociationMap</li>
+<li>ObjcAssociation</li>
+</ul>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><ul>
+<li>关联对象不是存储在关联的对象本身内存中</li>
+<li>关联对象存储在全局的同意的一个<code>AssociationManager</code>中</li>
+<li>设置关联对象为nil，就相当于是移除关联对象</li>
+</ul>
+<h2 id="Block"><a href="#Block" class="headerlink" title="Block"></a>Block</h2><h5 id="block的本质"><a href="#block的本质" class="headerlink" title="block的本质"></a>block的本质</h5><ul>
+<li><p>一个OC对象，内部也有一个isa指针</p>
+</li>
+<li><p>封装了函数调用以及函数调用环境</p>
+</li>
+<li><p>底层结构</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">main_block_impl_0</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> <span class="title">impl</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">main_block_desc_0</span>* <span class="title">Desc</span>;</span></span><br><span class="line">  <span class="comment">// int height; 如果捕获了外部的变量则会在这里声明一个一样的变量</span></span><br><span class="line">  __main_block_impl_0(<span class="keyword">void</span> *fp, struct __main_block_desc_0 *desc, <span class="keyword">int</span> flags=<span class="number">0</span>) &#123;</span><br><span class="line">    impl.isa = &amp;_NSConcreteStackBlock;</span><br><span class="line">    impl.Flags = flags;</span><br><span class="line">    impl.FuncPtr = fp;</span><br><span class="line">    Desc = desc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> &#123;</span></span><br><span class="line">  <span class="keyword">void</span> *isa;</span><br><span class="line">  <span class="keyword">int</span> Flags;</span><br><span class="line">  <span class="keyword">int</span> Reserved;</span><br><span class="line">  <span class="keyword">void</span> *FuncPtr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> __<span class="title">main_block_desc_0</span> &#123;</span></span><br><span class="line">  <span class="keyword">size_t</span> reserved;</span><br><span class="line">  <span class="keyword">size_t</span> Block_size;</span><br><span class="line">&#125; __main_block_desc_0_DATA = &#123; <span class="number">0</span>, <span class="built_in"><span class="keyword">sizeof</span></span>(struct __main_block_impl_0)&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> __main_block_func_0(struct __main_block_impl_0 *__cself, <span class="keyword">int</span> age) &#123; </span><br><span class="line">    <span class="built_in">NSLog</span>((NSString*)&amp;__NSConstantStringImpl__var_folders_30_2cmc1v1n3rj_54532lk15wt00000gn_T_main_119818_mi_0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="block-变量捕获机制"><a href="#block-变量捕获机制" class="headerlink" title="block 变量捕获机制"></a>block 变量捕获机制</h5><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>是否会捕获到block内部</th>
+<th>访问方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>auto局部变量</td>
+<td>是</td>
+<td>值传递</td>
+</tr>
+<tr>
+<td>static局部变量</td>
+<td>是</td>
+<td>指针传递</td>
+</tr>
+<tr>
+<td>全部变量</td>
+<td>否</td>
+<td>直接访问</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>局部变量</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int weight = 10</span><br><span class="line">static int height = 10;</span><br><span class="line">void (^block)(void) = ^&#123;</span><br><span class="line">    NSLog(@&quot;%d&quot;, height);</span><br><span class="line">&#125;;</span><br><span class="line">weight = 30;</span><br><span class="line">height = 20;</span><br><span class="line">block(); // 这时调用block可以发现height是20</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>转化成C++代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">main_block_impl_0</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> <span class="title">impl</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">main_block_desc_0</span>* <span class="title">Desc</span>;</span></span><br><span class="line">  <span class="keyword">int</span> weight; <span class="comment">// 自动变量通过值传递进行捕获如果外部修改了这个值不会变</span></span><br><span class="line">  <span class="keyword">int</span> *height; <span class="comment">// height变量是通过指针进行捕获的，所以捕获进去的变量和外部定义的变量是同一个，要变一起变</span></span><br><span class="line">  __main_block_impl_0(<span class="keyword">void</span> *fp, struct __main_block_desc_0 *desc, <span class="keyword">int</span> _weight, <span class="keyword">int</span> *_height, <span class="keyword">int</span> flags=<span class="number">0</span>) : weight(_weight), height(_height) &#123;</span><br><span class="line">    impl.isa = &amp;_NSConcreteStackBlock;</span><br><span class="line">    impl.Flags = flags;</span><br><span class="line">    impl.FuncPtr = fp;</span><br><span class="line">    Desc = desc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>全局变量</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int weight = 10;</span><br><span class="line">static int height = 10;</span><br><span class="line"></span><br><span class="line">int main(int argc, char * argv[]) &#123;</span><br><span class="line">    @autoreleasepool &#123;</span><br><span class="line">        int age = 10;</span><br><span class="line">        void (^block)(int) = ^(int age)&#123;</span><br><span class="line">            NSLog(@&quot;weight is %d&quot;, weight); // 20</span><br><span class="line">            NSLog(@&quot;age is %d&quot;, age); // 30</span><br><span class="line">            NSLog(@&quot;height is %d&quot;, height); // 20</span><br><span class="line">        &#125;;</span><br><span class="line">        age = 30;</span><br><span class="line">        weight = 50;</span><br><span class="line">        height = 20;</span><br><span class="line">        </span><br><span class="line">        block(age);</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  转成C++代码：</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> weight = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> height = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">main_block_impl_0</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> <span class="title">impl</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">main_block_desc_0</span>* <span class="title">Desc</span>;</span></span><br><span class="line">  __main_block_impl_0(<span class="keyword">void</span> *fp, struct __main_block_desc_0 *desc, <span class="keyword">int</span> flags=<span class="number">0</span>) &#123;</span><br><span class="line">    impl.isa = &amp;_NSConcreteStackBlock;</span><br><span class="line">    impl.Flags = flags;</span><br><span class="line">    impl.FuncPtr = fp;</span><br><span class="line">    Desc = desc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>  可以看出全部变量是不用捕获的，可以直接访问。</p>
+<h5 id="对象函数中的block"><a href="#对象函数中的block" class="headerlink" title="对象函数中的block"></a>对象函数中的block</h5><p>  如果在一个对象中声明了一个方法，并且在方法中使用了self</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@implementation DLPerson</span><br><span class="line">- (void)test &#123;</span><br><span class="line">    void (^block)(void) = ^&#123;</span><br><span class="line">        NSLog(@&quot;%p&quot;, self);</span><br><span class="line">    &#125;;</span><br><span class="line">    block();</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>  转成C++代码：</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> __<span class="title">DLPerson__test_block_impl_0</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">block_impl</span> <span class="title">impl</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> __<span class="title">DLPerson__test_block_desc_0</span>* <span class="title">Desc</span>;</span></span><br><span class="line">  DLPerson *self;</span><br><span class="line">  __DLPerson__test_block_impl_0(<span class="keyword">void</span> *fp, struct __DLPerson__test_block_desc_0 *desc, DLPerson *_self, <span class="keyword">int</span> flags=<span class="number">0</span>) : <span class="built_in">self</span>(_self) &#123;</span><br><span class="line">    impl.isa = &amp;_NSConcreteStackBlock;</span><br><span class="line">    impl.Flags = flags;</span><br><span class="line">    impl.FuncPtr = fp;</span><br><span class="line">    Desc = desc;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>  可以看出block内部是捕获了<code>DLPerson</code>这个对象的，为什么？找一下<code>test</code>函数转成的C++代码：</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> _I_DLPerson_test(DLPerson * self, SEL _cmd) &#123;</span><br><span class="line">    <span class="built_in"><span class="keyword">void</span></span> (*block)(<span class="keyword">void</span>) = ((<span class="built_in"><span class="keyword">void</span></span> (*)())&amp;__DLPerson__test_block_impl_0((<span class="keyword">void</span> *)__DLPerson__test_block_func_0, &amp;__DLPerson__test_block_desc_0_DATA, self, <span class="number">570425344</span>));</span><br><span class="line">    ((<span class="built_in"><span class="keyword">void</span></span> (*)(__block_impl *))((__block_impl *)block)-&gt;FuncPtr)((__block_impl *)block);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>  可以看出执行<code>test</code>函数在底层是传入了一个<code>DLPerson</code>对象的，对于这个函数来说<code>DLPerson</code>是一个局部变量所以会捕获到block内部</p>
+</li>
+</ul>
+<h5 id="block-类型"><a href="#block-类型" class="headerlink" title="block 类型"></a>block 类型</h5><p>三种类型（继承自<code>NSBlock</code>）</p>
+<ul>
+<li><code>__NSGlobalBlock__</code>（__NSConcreteGlobalBlock）: 捕获了全局变量或者未捕获变量</li>
+<li><code>__NSStackBlock__</code>（__NSConcreteStackBlock）: 捕获了auto变量</li>
+<li><code>__NSMallocBlock__</code>（__NSConcreteMallocBlock）: StackBlock执行了copy</li>
+</ul>
+<h5 id="block的copy"><a href="#block的copy" class="headerlink" title="block的copy"></a>block的copy</h5><ul>
+<li><p>ARC环境下，编译器会根据情况自动将block拷贝到堆上</p>
+<ul>
+<li>将block作为返回值时会自动拷贝到堆上</li>
+<li>将block赋值给<code>__strong</code>修饰的指针的时会自动拷贝到堆上</li>
+<li>block作为Cocoa API中方法名含有usingBlock的方法参数时会自动拷贝到堆上</li>
+<li>block作为GCD API的方法参数时也会自动拷贝到堆上</li>
+</ul>
+</li>
+<li><p>使用运行时生成C++代码</p>
+<p>  <code>xcrun -sdk iphoneos clang -arch arm64 -rewrite-objc -fobjc-arc -fobjc-runtime=ios-8.0.0 main.m </code></p>
+</li>
+</ul>
+<h5 id="对象类型的auto变量"><a href="#对象类型的auto变量" class="headerlink" title="对象类型的auto变量"></a>对象类型的auto变量</h5><ul>
+<li>如果block在栈上，block不会强引用这个对象类型的auto变量</li>
+<li>如果block在堆上<ul>
+<li>会调用block内部的copy函数</li>
+<li>copy函数会调用<code>_Block_object_assign</code>函数</li>
+<li><code>_Block_object_assign</code>函数会根据auto变量的修饰符(<code>__strong</code>、<code>__weak</code>等)作出相应的操作</li>
+</ul>
+</li>
+<li>block从堆上移除<ul>
+<li>会调用block内部的dispose函数</li>
+<li>dispose函数会调用<code>_Block_object_dispose</code>函数</li>
+<li><code>_Block_object_dispose</code>函数会自动释放引用的auto变量，类似于release</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>Objective-C</category>
@@ -1395,7 +1528,7 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#pragma used(foo) // foo为你初始化却未使用的变量</span><br></pre></td></tr></table></figure>
 
-<h5 id="for-where循环"><a href="#for-where循环" class="headerlink" title="for-where循环"></a><code>for-where</code>循环</h5><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> collection <span class="keyword">where</span> item.hasProperty &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="for-where循环"><a href="#for-where循环" class="headerlink" title="for-where循环"></a><code>for-where</code>循环</h5><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> collection <span class="keyword">where</span> item.hasProperty &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h5 id="使用slice共享内存优化性能"><a href="#使用slice共享内存优化性能" class="headerlink" title="使用slice共享内存优化性能"></a>使用<code>slice</code>共享内存优化性能</h5><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> midpoint <span class="operator">=</span> absences.count <span class="operator">/</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">let</span> firstHalf <span class="operator">=</span> absences[<span class="operator">..&lt;</span>midpoint]</span><br><span class="line"><span class="keyword">let</span> secondHalf <span class="operator">=</span> absences[midpoint<span class="operator">...</span>]</span><br><span class="line"><span class="comment">// firstHalf/secondHalf并不会复制和占用更多内存</span></span><br></pre></td></tr></table></figure>
 
@@ -1407,6 +1540,7 @@
 
 <h5 id="集合使用lazy延迟序列"><a href="#集合使用lazy延迟序列" class="headerlink" title="集合使用lazy延迟序列"></a>集合使用<code>lazy</code>延迟序列</h5><figure class="highlight swift"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> nums <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">var</span> result <span class="operator">=</span> nums.lazy.map &#123; <span class="type">String</span>(<span class="variable">$0</span>) &#125;</span><br><span class="line">result[<span class="number">0</span>] <span class="comment">// 对1进行map操作</span></span><br><span class="line">result[<span class="number">1</span>] <span class="comment">// 对2进行map操作</span></span><br></pre></td></tr></table></figure>
 
+<h5 id="Swift源码转化为raw-SIL"><a href="#Swift源码转化为raw-SIL" class="headerlink" title="Swift源码转化为raw SIL"></a>Swift源码转化为raw SIL</h5><p><code>swiftc -emit-silgen Source.swift -o Source.sil</code></p>
 ]]></content>
       <categories>
         <category>iOS</category>

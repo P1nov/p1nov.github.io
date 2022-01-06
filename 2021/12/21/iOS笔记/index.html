@@ -201,7 +201,7 @@
     <div class="head-info">
       <span class="post-info-item"><i class="iconfont iconcalendar"></i>December 21, 2021</span>
       
-      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1645</span>
+      <span class="post-info-item"><i class="iconfont iconfont-size"></i>1713</span>
     </div>
   </div>
 </section>
@@ -218,7 +218,7 @@
 </ul>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#pragma used(foo) // foo为你初始化却未使用的变量</span><br></pre></td></tr></table></figure>
 
-<h5 id="for-where循环"><a href="#for-where循环" class="headerlink" title="for-where循环"></a><code>for-where</code>循环</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> collection <span class="keyword">where</span> item.hasProperty &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="for-where循环"><a href="#for-where循环" class="headerlink" title="for-where循环"></a><code>for-where</code>循环</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> collection <span class="keyword">where</span> item.hasProperty &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h5 id="使用slice共享内存优化性能"><a href="#使用slice共享内存优化性能" class="headerlink" title="使用slice共享内存优化性能"></a>使用<code>slice</code>共享内存优化性能</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> midpoint <span class="operator">=</span> absences.count <span class="operator">/</span> <span class="number">2</span></span><br><span class="line"><span class="keyword">let</span> firstHalf <span class="operator">=</span> absences[<span class="operator">..&lt;</span>midpoint]</span><br><span class="line"><span class="keyword">let</span> secondHalf <span class="operator">=</span> absences[midpoint<span class="operator">...</span>]</span><br><span class="line"><span class="comment">// firstHalf/secondHalf并不会复制和占用更多内存</span></span><br></pre></td></tr></table></figure>
 
@@ -230,6 +230,7 @@
 
 <h5 id="集合使用lazy延迟序列"><a href="#集合使用lazy延迟序列" class="headerlink" title="集合使用lazy延迟序列"></a>集合使用<code>lazy</code>延迟序列</h5><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nums <span class="operator">=</span> [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="keyword">var</span> result <span class="operator">=</span> nums.lazy.map &#123; <span class="type">String</span>(<span class="variable">$0</span>) &#125;</span><br><span class="line">result[<span class="number">0</span>] <span class="comment">// 对1进行map操作</span></span><br><span class="line">result[<span class="number">1</span>] <span class="comment">// 对2进行map操作</span></span><br></pre></td></tr></table></figure>
 
+<h5 id="Swift源码转化为raw-SIL"><a href="#Swift源码转化为raw-SIL" class="headerlink" title="Swift源码转化为raw SIL"></a>Swift源码转化为raw SIL</h5><p><code>swiftc -emit-silgen Source.swift -o Source.sil</code></p>
 
       </section>
       <section class="extra">
@@ -293,7 +294,7 @@
           
   <aside class="toc-wrap">
     <h3 class="toc-title">文章目录：</h3>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Swift%E4%BB%A3%E7%A0%81%E5%B1%82%E6%AC%A1%E4%BC%98%E5%8C%96"><span class="toc-text">Swift代码层次优化</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AD%A6%E5%91%8A%E5%BF%BD%E7%95%A5"><span class="toc-text">警告忽略</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#for-where%E5%BE%AA%E7%8E%AF"><span class="toc-text">for-where循环</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8slice%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD"><span class="toc-text">使用slice共享内存优化性能</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8extension%E7%BB%84%E7%BB%87%E4%BB%A3%E7%A0%81"><span class="toc-text">使用extension组织代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8protocol%E5%AE%9E%E7%8E%B0%E5%A4%9A%E6%80%81"><span class="toc-text">使用protocol实现多态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E4%BD%BF%E7%94%A8lazy%E5%BB%B6%E8%BF%9F%E5%BA%8F%E5%88%97"><span class="toc-text">集合使用lazy延迟序列</span></a></li></ol></li></ol></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Swift%E4%BB%A3%E7%A0%81%E5%B1%82%E6%AC%A1%E4%BC%98%E5%8C%96"><span class="toc-text">Swift代码层次优化</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AD%A6%E5%91%8A%E5%BF%BD%E7%95%A5"><span class="toc-text">警告忽略</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#for-where%E5%BE%AA%E7%8E%AF"><span class="toc-text">for-where循环</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8slice%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD"><span class="toc-text">使用slice共享内存优化性能</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8extension%E7%BB%84%E7%BB%87%E4%BB%A3%E7%A0%81"><span class="toc-text">使用extension组织代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8protocol%E5%AE%9E%E7%8E%B0%E5%A4%9A%E6%80%81"><span class="toc-text">使用protocol实现多态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E4%BD%BF%E7%94%A8lazy%E5%BB%B6%E8%BF%9F%E5%BA%8F%E5%88%97"><span class="toc-text">集合使用lazy延迟序列</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Swift%E6%BA%90%E7%A0%81%E8%BD%AC%E5%8C%96%E4%B8%BAraw-SIL"><span class="toc-text">Swift源码转化为raw SIL</span></a></li></ol></li></ol></li></ol></li></ol>
   </aside>
 
         
